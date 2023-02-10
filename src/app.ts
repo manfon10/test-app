@@ -15,9 +15,9 @@ import { checkApiKey } from "./middlewares/auth.handler";
 
 const app = express();
 
-app.use(checkApiKey);
-
 app.use(cors());
+
+app.use(checkApiKey);
 
 app.use(morgan(process.env.NODE_ENV === "production" ? "tiny" : "dev"));
 
