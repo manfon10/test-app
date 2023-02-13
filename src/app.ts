@@ -4,6 +4,7 @@ import express from "express";
 
 import cors from "cors";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 
 import { router } from "./routes";
 import {
@@ -17,13 +18,15 @@ const app = express();
 
 app.use(cors());
 
-app.use(checkApiKey);
+app.use(cookieParser());
 
 app.use(morgan(process.env.NODE_ENV === "production" ? "tiny" : "dev"));
 
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: false }));
+
+app.use(checkApiKey);
 
 app.use(router);
 
