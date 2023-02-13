@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc && npm run copy-files",
-    "dev": "nodemon ./src/server.ts",
-    "start": "node dist/server.js",
+    "dev": "cross-env NODE_ENV=developmentnodemon ./src/server.ts",
+    "start": "cross-env NODE_ENV=production node dist/server.js",
     "copy-files": "copyfiles -u 1 src/**/*.pug dist/"
   },
   "repository": {
@@ -40,6 +40,7 @@
     "cookie-parser": "^1.4.6",
     "copyfiles": "^2.4.1",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "html-to-text": "^9.0.3",
@@ -49,7 +50,6 @@
     "mysql2": "^3.1.0",
     "nodemailer": "^6.9.1",
     "pug": "^3.0.2",
-    "sequelize": "^6.28.0",
-    "typescript": "^4.9.4"
+    "sequelize": "^6.28.0"
   }
 }
