@@ -1,9 +1,9 @@
 FROM --platform=linux/amd64 node:18-alpine
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
+RUN npm install && npm cache clean --force && npm install -g typescript
 
-COPY . .
+COPY ./ ./
 
 CMD [ "npm", "start" ]
