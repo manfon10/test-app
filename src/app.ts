@@ -1,10 +1,9 @@
 import "dotenv/config";
 
-import express from "express";
+import express, { Request, Response } from "express";
 
 import cors from "cors";
 import morgan from "morgan";
-import cookieParser from "cookie-parser";
 
 import { router } from "./routes";
 import {
@@ -18,13 +17,17 @@ const app = express();
 
 app.use(cors());
 
-app.use(cookieParser());
-
 app.use(morgan(process.env.NODE_ENV === "production" ? "tiny" : "dev"));
 
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: false }));
+
+app.use(
+  router.get("/", (_: Request, res: Response) =>
+    res.json({ "advtech-api": "v1.0.0" })
+  )
+);
 
 app.use(checkApiKey);
 

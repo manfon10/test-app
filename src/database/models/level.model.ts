@@ -1,7 +1,8 @@
 import { DataTypes, Model } from "sequelize";
 
 import { sequelize } from ".";
-import { ILevelAttributes, ILevelInput } from "../../types/models/level.type";
+
+import { ILevelAttributes, ILevelInput } from "../../types/models/user.type";
 
 class Level
   extends Model<ILevelAttributes, ILevelInput>

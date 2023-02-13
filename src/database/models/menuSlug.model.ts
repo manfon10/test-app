@@ -2,20 +2,24 @@ import { DataTypes, Model } from "sequelize";
 
 import { sequelize } from ".";
 
-import { IAreaAttributes, IAreaInput } from "../../types/models/user.type";
+import {
+  IMenuSlugAttributes,
+  IMenuSlugInput,
+} from "../../types/models/app.type";
 
-class Area
-  extends Model<IAreaAttributes, IAreaInput>
-  implements IAreaAttributes
+class MenuSlug
+  extends Model<IMenuSlugAttributes, IMenuSlugInput>
+  implements IMenuSlugAttributes
 {
   public id!: number;
   public name!: string;
+  public slug!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
 
-Area.init(
+MenuSlug.init(
   {
     id: {
       autoIncrement: true,
@@ -27,6 +31,10 @@ Area.init(
       allowNull: false,
       type: DataTypes.STRING,
     },
+    slug: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
   },
   {
     timestamps: true,
@@ -34,4 +42,4 @@ Area.init(
   }
 );
 
-export default Area;
+export default MenuSlug;

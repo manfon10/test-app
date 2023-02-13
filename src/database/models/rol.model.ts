@@ -2,12 +2,10 @@ import { DataTypes, Model } from "sequelize";
 
 import { sequelize } from ".";
 
-import { IAreaAttributes, IAreaInput } from "../../types/models/user.type";
+import { IRolAttributes, IRolInput } from "../../types/models/user.type";
+import MenuSlug from "./menuSlug.model";
 
-class Area
-  extends Model<IAreaAttributes, IAreaInput>
-  implements IAreaAttributes
-{
+class Rol extends Model<IRolAttributes, IRolInput> implements IRolAttributes {
   public id!: number;
   public name!: string;
 
@@ -15,7 +13,7 @@ class Area
   public readonly updatedAt!: Date;
 }
 
-Area.init(
+Rol.init(
   {
     id: {
       autoIncrement: true,
@@ -34,4 +32,7 @@ Area.init(
   }
 );
 
-export default Area;
+Rol.belongsToMany(MenuSlug, { as: "menu_slugs", through: "rols_menu_slugs" });
+MenuSlug.belongsToMany(Rol, { as: "menu_slugs", through: "rols_menu_slugs" });
+
+export default Rol;

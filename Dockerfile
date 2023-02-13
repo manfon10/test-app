@@ -1,9 +1,24 @@
-FROM --platform=linux/amd64 node:18-alpine
-WORKDIR /app
+FROM node:18-alpine as build-image
+
+WORKDIR /usr/src/app
 
 COPY package*.json ./
-RUN npm install && npm cache clean --force && npm install -g typescript
+COPY tsconfig.json ./
+COPY ./src ./src
 
-COPY ./ ./
+RUN npm install
+RUN npm install typescript
+RUN npm run build
 
-CMD [ "npm", "start" ]
+FROM node:18-alpine
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+COPY --from=build-image ./usr/src/app/dist ./dist
+
+RUN npm install
+
+COPY . .
+
+CMD ["npm", "start"]
