@@ -2,16 +2,13 @@ const Router = require("express");
 
 const {
   createCompany,
-  createBranch,
-  assignBranchCompany,
   findCompanyById,
   deleteCompanyById,
+  findAllCompanies,
 } = require("../controllers/company.controller");
 
 const {
   createCompanyDto,
-  createBranchDto,
-  assignBranchCompanyDto,
   filterCompanyByParamsDto,
 } = require("../dtos/company.dto");
 
@@ -21,28 +18,12 @@ const router = Router();
 
 // Routes super admin
 
-// Create branch
-
-router.post(
-  "/create_branch",
-  validatorHandler(createBranchDto, "body"),
-  createBranch
-);
-
 // Create company
 
 router.post(
   "/create_company",
   validatorHandler(createCompanyDto, "body"),
   createCompany
-);
-
-// Assign branch to company
-
-router.post(
-  "/assign_branch_company",
-  validatorHandler(assignBranchCompanyDto, "body"),
-  assignBranchCompany
 );
 
 // Find company by id
@@ -60,5 +41,9 @@ router.delete(
   validatorHandler(filterCompanyByParamsDto, "params"),
   deleteCompanyById
 );
+
+// Find all companies
+
+router.get("/", findAllCompanies);
 
 module.exports = router;
