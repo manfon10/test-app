@@ -7,7 +7,7 @@ const slugService = {
       include: {
         model: MenuSlug,
         as: "menu_slug",
-        attributes: ["name", "slug", "icon"],
+        attributes: ["name", "slug", "slug_root", "icon"],
       },
       attributes: ["menu_slug_id"],
       where: { rol_id },

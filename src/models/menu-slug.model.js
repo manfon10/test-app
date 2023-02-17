@@ -20,6 +20,10 @@ MenuSlug.init(
       allowNull: false,
       type: DataTypes.STRING,
     },
+    slug_root: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
     icon: {
       allowNull: false,
       type: DataTypes.STRING,

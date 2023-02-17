@@ -30,7 +30,7 @@ const createBranchDto = Joi.object({
   country: country.required(),
 });
 
-const company_id = Joi.number().integer();
+const company_id = Joi.number();
 const branch_id = Joi.number().integer();
 
 const assignBranchCompanyDto = Joi.object({
@@ -38,4 +38,13 @@ const assignBranchCompanyDto = Joi.object({
   branch_id: branch_id.required(),
 });
 
-module.exports = { createCompanyDto, createBranchDto, assignBranchCompanyDto };
+const filterCompanyByParamsDto = Joi.object({
+  id: company_id.required(),
+});
+
+module.exports = {
+  createCompanyDto,
+  createBranchDto,
+  assignBranchCompanyDto,
+  filterCompanyByParamsDto,
+};

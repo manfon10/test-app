@@ -36,4 +36,34 @@ const assignBranchCompany = async (req, res, next) => {
   }
 };
 
-module.exports = { createBranch, createCompany, assignBranchCompany };
+const findCompanyById = async (req, res, next) => {
+  try {
+    const id = req.params;
+
+    const company = await companyService.findCompany(id);
+
+    res.status(200).json({ company });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteCompanyById = async (req, res, next) => {
+  try {
+    const id = req.params;
+
+    await companyService.deleteCompny(id);
+
+    res.status(201).json({ message: "Company deleted!" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  createBranch,
+  createCompany,
+  assignBranchCompany,
+  findCompanyById,
+  deleteCompanyById,
+};
