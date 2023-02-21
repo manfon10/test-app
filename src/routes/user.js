@@ -10,8 +10,8 @@ const validatorHandler = require("../middlewares/validation.handler");
 
 const router = Router();
 
-router.use(checkToken);
 router.use(checkCookie);
+router.use(checkToken);
 
 // Routes super admin
 
