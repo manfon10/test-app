@@ -10,29 +10,16 @@ const {
 
 const { filterAreaByParamsDto, createAreaDto } = require("../dtos/area.dto");
 
+const { checkToken } = require("../middlewares/auth.handler");
+const { checkCookie } = require("../middlewares/cookie.handler");
 const validatorHandler = require("../middlewares/validation.handler");
 
 const router = Router();
 
+router.use(checkToken);
+router.use(checkCookie);
+
 // Routes super admin
-
-// Find All Areas
-
-router.get("/", findAllAreas);
-
-// Find area by id
-
-router.get(
-  "/:id",
-  validatorHandler(filterAreaByParamsDto, "params"),
-  findAreaById
-);
-
-// Create area
-
-router.post("/", validatorHandler(createAreaDto, "body"), createArea);
-
-// Delete area by id
 
 router.delete(
   "/:id",
@@ -40,12 +27,20 @@ router.delete(
   deleteArea
 );
 
-// Update area by id
+router.get("/", findAllAreas);
+
+router.get(
+  "/:id",
+  validatorHandler(filterAreaByParamsDto, "params"),
+  findAreaById
+);
 
 router.patch(
   "/:id",
   validatorHandler(filterAreaByParamsDto, "params"),
   updateArea
 );
+
+router.post("/", validatorHandler(createAreaDto, "body"), createArea);
 
 module.exports = router;

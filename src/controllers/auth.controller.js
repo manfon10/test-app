@@ -1,4 +1,7 @@
-const { cookieResponse } = require("../middlewares/cookie.handler");
+const {
+  cookieResponse,
+  clearCookie,
+} = require("../middlewares/cookie.handler");
 
 const authService = require("../services/auth.service");
 
@@ -14,4 +17,12 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-module.exports = { loginUser };
+const logoutUser = (_, res, next) => {
+  try {
+    return clearCookie(res);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { loginUser, logoutUser };

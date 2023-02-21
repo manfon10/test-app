@@ -10,17 +10,18 @@ const {
 
 const { createLevelDto, filterLevelByParamsDto } = require("../dtos/level.dto");
 
+const { checkToken } = require("../middlewares/auth.handler");
+const { checkCookie } = require("../middlewares/cookie.handler");
 const validatorHandler = require("../middlewares/validation.handler");
 
 const router = Router();
 
+router.use(checkToken);
+router.use(checkCookie);
+
 // Routes super admin
 
-// Find All Areas
-
 router.get("/", findAllLevels);
-
-// Find area by id
 
 router.get(
   "/:id",
@@ -28,24 +29,18 @@ router.get(
   findLevelById
 );
 
-// Create area
-
-router.post("/", validatorHandler(createLevelDto, "body"), createLevel);
-
-// Delete area by id
-
 router.delete(
   "/:id",
   validatorHandler(filterLevelByParamsDto, "params"),
   deleteLevel
 );
 
-// Update area by id
-
 router.patch(
   "/:id",
   validatorHandler(filterLevelByParamsDto, "params"),
   updateLevel
 );
+
+router.post("/", validatorHandler(createLevelDto, "body"), createLevel);
 
 module.exports = router;

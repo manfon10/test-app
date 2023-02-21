@@ -13,33 +13,16 @@ const {
   filterBranchByParamsDto,
 } = require("../dtos/branch.dto");
 
+const { checkToken } = require("../middlewares/auth.handler");
+const { checkCookie } = require("../middlewares/cookie.handler");
 const validatorHandler = require("../middlewares/validation.handler");
 
 const router = Router();
 
+router.use(checkToken);
+router.use(checkCookie);
+
 // Routes super admin
-
-// Create branch
-
-router.post(
-  "/create_branch",
-  validatorHandler(createBranchDto, "body"),
-  createBranch
-);
-
-// Find branch by id
-
-router.get(
-  "/:id",
-  validatorHandler(filterBranchByParamsDto, "params"),
-  findBranchById
-);
-
-// Find all branches
-
-router.get("/", findAllBranches);
-
-// Delete branch by id
 
 router.delete(
   "/:id",
@@ -47,10 +30,24 @@ router.delete(
   deleteBranchById
 );
 
+router.get("/", findAllBranches);
+
+router.get(
+  "/:id",
+  validatorHandler(filterBranchByParamsDto, "params"),
+  findBranchById
+);
+
 router.patch(
   "/:id",
   validatorHandler(filterBranchByParamsDto, "params"),
   updateBranchById
+);
+
+router.post(
+  "/create_branch",
+  validatorHandler(createBranchDto, "body"),
+  createBranch
 );
 
 module.exports = router;

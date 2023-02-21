@@ -11,8 +11,7 @@ const {
   errorHandler,
   ormErrorHandler,
 } = require("./middlewares/error.handler");
-const { checkApiKey, checkToken } = require("./middlewares/auth.handler");
-const { checkCookie } = require("./middlewares/cookie.handler");
+const { checkApiKey } = require("./middlewares/auth.handler");
 
 const app = express();
 
@@ -25,10 +24,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(checkApiKey);
-
-router.use(checkCookie);
-
-router.use(checkToken);
 
 app.use(router);
 

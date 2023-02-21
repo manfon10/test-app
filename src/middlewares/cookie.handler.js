@@ -20,6 +20,13 @@ const cookieResponse = (res, data) => {
   throw boom.unauthorized();
 };
 
+const clearCookie = (res) => {
+  return res
+    .status(201)
+    .clearCookie("token")
+    .json({ message: "Sesion terminated!" });
+};
+
 const checkCookie = (req, _, next) => {
   if (req.headers.cookie) {
     return next();
@@ -28,4 +35,4 @@ const checkCookie = (req, _, next) => {
   throw boom.unauthorized();
 };
 
-module.exports = { checkCookie, cookieResponse };
+module.exports = { checkCookie, cookieResponse, clearCookie };

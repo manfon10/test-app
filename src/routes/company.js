@@ -13,21 +13,18 @@ const {
   filterCompanyByParamsDto,
 } = require("../dtos/company.dto");
 
+const { checkToken } = require("../middlewares/auth.handler");
+const { checkCookie } = require("../middlewares/cookie.handler");
 const validatorHandler = require("../middlewares/validation.handler");
 
 const router = Router();
 
+router.use(checkToken);
+router.use(checkCookie);
+
 // Routes super admin
 
-// Create company
-
-router.post(
-  "/create_company",
-  validatorHandler(createCompanyDto, "body"),
-  createCompany
-);
-
-// Find company by id
+router.get("/", findAllCompanies);
 
 router.get(
   "/:id",
@@ -35,22 +32,22 @@ router.get(
   findCompanyById
 );
 
-// Delete company by id
-
 router.delete(
   "/:id",
   validatorHandler(filterCompanyByParamsDto, "params"),
   deleteCompanyById
 );
 
-// Find all companies
-
-router.get("/", findAllCompanies);
-
 router.patch(
   "/:id",
   validatorHandler(filterCompanyByParamsDto, "params"),
   updateCompanyById
+);
+
+router.post(
+  "/create_company",
+  validatorHandler(createCompanyDto, "body"),
+  createCompany
 );
 
 module.exports = router;
