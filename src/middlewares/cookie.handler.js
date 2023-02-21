@@ -24,11 +24,11 @@ const clearCookie = (res) => {
   return res
     .status(201)
     .clearCookie("token")
-    .json({ message: "Sesion terminated!" });
+    .json({ message: "Session terminated!" });
 };
 
 const checkCookie = (req, _, next) => {
-  if (req.headers.cookie) {
+  if (req.headers.cookie || req.cookie) {
     return next();
   }
 
