@@ -5,6 +5,7 @@ const {
   findCompanyById,
   deleteCompanyById,
   findAllCompanies,
+  updateCompanyById,
 } = require("../controllers/company.controller");
 
 const {
@@ -45,5 +46,11 @@ router.delete(
 // Find all companies
 
 router.get("/", findAllCompanies);
+
+router.patch(
+  "/:id",
+  validatorHandler(filterCompanyByParamsDto, "params"),
+  updateCompanyById
+);
 
 module.exports = router;

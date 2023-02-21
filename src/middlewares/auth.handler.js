@@ -43,4 +43,8 @@ const checkToken = async (req, _, next) => {
   }
 };
 
-module.exports = { checkApiKey, checkToken };
+const checkPermissions = async (req, res, next) => {
+  next();
+};
+
+module.exports = { checkApiKey, checkToken, checkPermissions };

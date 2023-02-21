@@ -46,9 +46,23 @@ const findAllCompanies = async (_, res, next) => {
   }
 };
 
+const updateCompanyById = async (req, res, next) => {
+  try {
+    const id = req.params;
+    const body = req.body;
+
+    await companyService.updateCompany(body, id);
+
+    res.status(201).json({ message: "Company update!" });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   createCompany,
   findCompanyById,
   deleteCompanyById,
   findAllCompanies,
+  updateCompanyById
 };

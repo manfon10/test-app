@@ -66,6 +66,12 @@ const branchService = {
 
     return branches;
   },
+
+  updateBranch: async (data, filters) => {
+    await branchService.findBranch(filters);
+
+    return await Branch.update(data, { where: filters });
+  },
 };
 
 module.exports = branchService;

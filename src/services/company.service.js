@@ -37,6 +37,8 @@ const companyService = {
   },
 
   updateCompany: async (data, filters) => {
+    await companyService.findCompany(filters);
+
     return await Company.update(data, { where: filters });
   },
 };

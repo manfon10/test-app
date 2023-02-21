@@ -46,9 +46,23 @@ const findBranchById = async (req, res, next) => {
   }
 };
 
+const updateBranchById = async (req, res, next) => {
+  try {
+    const id = req.params;
+    const body = req.body;
+
+    await branchService.updateBranch(body, id);
+
+    res.status(201).json({ message: "Branch Update!" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createBranch,
   deleteBranchById,
   findAllBranches,
   findBranchById,
+  updateBranchById,
 };

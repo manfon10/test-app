@@ -5,6 +5,7 @@ const {
   findBranchById,
   findAllBranches,
   deleteBranchById,
+  updateBranchById,
 } = require("../controllers/branch.controller");
 
 const {
@@ -44,6 +45,12 @@ router.delete(
   "/:id",
   validatorHandler(filterBranchByParamsDto, "params"),
   deleteBranchById
+);
+
+router.patch(
+  "/:id",
+  validatorHandler(filterBranchByParamsDto, "params"),
+  updateBranchById
 );
 
 module.exports = router;
