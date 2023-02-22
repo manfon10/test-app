@@ -19,6 +19,10 @@ Permission.init(
       allowNull: false,
       type: DataTypes.STRING,
     },
+    slug: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
   },
   {
     timestamps: true,

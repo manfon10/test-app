@@ -35,9 +35,9 @@ const levelService = {
   },
 
   updateLevel: async (data, filters) => {
-    await levelService.findLevel(filters);
+    await Level.update(data, { where: filters });
 
-    return await Level.update(data, { where: filters });
+    return await levelService.findLevel(filters);
   },
 };
 

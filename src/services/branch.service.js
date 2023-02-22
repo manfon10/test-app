@@ -68,9 +68,9 @@ const branchService = {
   },
 
   updateBranch: async (data, filters) => {
-    await branchService.findBranch(filters);
+    await Branch.update(data, { where: filters });
 
-    return await Branch.update(data, { where: filters });
+    return await branchService.findBranch(filters);
   },
 };
 

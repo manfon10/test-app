@@ -10,4 +10,10 @@ const createPermissionDto = Joi.object({
   menu_slug_id: menu_slug_id.required(),
 });
 
-module.exports = { createPermissionDto };
+const permission_id = Joi.string();
+
+const filterPermissionByParamsDto = Joi.object({
+  id: permission_id.required(),
+});
+
+module.exports = { createPermissionDto, filterPermissionByParamsDto };

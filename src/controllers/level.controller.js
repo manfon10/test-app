@@ -51,9 +51,9 @@ const updateLevel = async (req, res, next) => {
     const id = req.params;
     const body = req.body;
 
-    await levelService.updateLevel(body, id);
+    const level = await levelService.updateLevel(body, id);
 
-    res.status(201).json({ message: "Level updated" });
+    res.status(201).json({ message: "Level updated", level });
   } catch (error) {
     next(error);
   }

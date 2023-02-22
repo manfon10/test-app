@@ -32,7 +32,7 @@ const checkToken = async (req, _, next) => {
     const user = await userService.findUser({ id: decodedToken.id });
 
     if (!user) {
-      throw boom.notFound("The owner of this token is no longer available'");
+      throw boom.notFound("The owner of this token is no longer available");
     }
 
     req.sessionUser = user;
@@ -43,7 +43,8 @@ const checkToken = async (req, _, next) => {
   }
 };
 
-const checkPermissions = async (req, res, next) => {
+const checkPermissions = (slug) => async (req, res, next) => {
+  console.log(slug);
   next();
 };
 

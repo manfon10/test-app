@@ -35,9 +35,9 @@ const areaService = {
   },
 
   updateArea: async (data, filters) => {
-    await areaService.findArea(filters);
+    await Area.update(data, { where: filters });
 
-    return await Area.update(data, { where: filters });
+    return await areaService.findArea(filters);
   },
 };
 

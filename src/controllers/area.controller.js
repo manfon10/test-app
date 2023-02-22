@@ -51,9 +51,9 @@ const updateArea = async (req, res, next) => {
     const id = req.params;
     const body = req.body;
 
-    await areaService.updateArea(body, id);
+    const area = await areaService.updateArea(body, id);
 
-    res.status(201).json({ message: "Area updated" });
+    res.status(201).json({ message: "Area updated", area });
   } catch (error) {
     next(error);
   }

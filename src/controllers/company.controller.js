@@ -51,18 +51,18 @@ const updateCompanyById = async (req, res, next) => {
     const id = req.params;
     const body = req.body;
 
-    await companyService.updateCompany(body, id);
+    const company = await companyService.updateCompany(body, id);
 
-    res.status(201).json({ message: "Company update!" });
+    res.status(201).json({ message: "Company update!", company });
   } catch (error) {
     next(error);
   }
-}
+};
 
 module.exports = {
   createCompany,
   findCompanyById,
   deleteCompanyById,
   findAllCompanies,
-  updateCompanyById
+  updateCompanyById,
 };

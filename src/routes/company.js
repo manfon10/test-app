@@ -13,7 +13,7 @@ const {
   filterCompanyByParamsDto,
 } = require("../dtos/company.dto");
 
-const { checkToken } = require("../middlewares/auth.handler");
+const { checkToken, checkPermissions } = require("../middlewares/auth.handler");
 const { checkCookie } = require("../middlewares/cookie.handler");
 const validatorHandler = require("../middlewares/validation.handler");
 
@@ -22,9 +22,11 @@ const router = Router();
 router.use(checkCookie);
 router.use(checkToken);
 
-// Routes super admin
-
-router.get("/", findAllCompanies);
+router.get(
+  "/",
+  checkPermissions("obtener_todas_las_empresas"),
+  findAllCompanies
+);
 
 router.get(
   "/:id",
