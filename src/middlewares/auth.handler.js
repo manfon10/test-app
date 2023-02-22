@@ -23,6 +23,8 @@ const checkToken = async (req, _, next) => {
       token = req.cookies.token;
     }
 
+    console.log("token", token);
+
     if (!token) {
       throw boom.unauthorized("Token is required!.");
     }
@@ -44,7 +46,6 @@ const checkToken = async (req, _, next) => {
 };
 
 const checkPermissions = async (req, res, next) => {
-  console.log(req.sessionUser);
   next();
 };
 
