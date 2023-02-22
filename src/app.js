@@ -16,9 +16,9 @@ const { checkApiKey } = require("./middlewares/auth.handler");
 
 const app = express();
 
-app.use(cookieParser());
-
 app.use(cors());
+
+app.use(cookieParser());
 
 app.use(morgan(process.env.NODE_ENV === "production" ? "tiny" : "dev"));
 
