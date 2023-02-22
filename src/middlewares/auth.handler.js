@@ -19,8 +19,8 @@ const checkToken = async (req, _, next) => {
   try {
     let token;
 
-    if (req.headers.cookie.startsWith("token")) {
-      token = req.headers.cookie.split("=")[1];
+    if (req.cookies.token) {
+      token = req.cookies.token;
     }
 
     if (!token) {

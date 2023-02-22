@@ -28,7 +28,7 @@ const clearCookie = (res) => {
 };
 
 const checkCookie = (req, _, next) => {
-  if (req.headers.cookie || req.cookies) {
+  if (req.cookies) {
     return next();
   }
 
