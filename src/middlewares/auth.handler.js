@@ -19,11 +19,9 @@ const checkToken = async (req, _, next) => {
   try {
     let token;
 
-    if (req.cookies) {
+    if (req.cookies.token) {
       token = req.cookies.token;
     }
-
-    console.log("token", token);
 
     if (!token) {
       throw boom.unauthorized("Token is required!.");
