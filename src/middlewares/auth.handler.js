@@ -19,7 +19,7 @@ const checkToken = async (req, _, next) => {
   try {
     let token;
 
-    if (req.cookies.token) {
+    if (req.cookies) {
       token = req.cookies.token;
     }
 
@@ -44,6 +44,7 @@ const checkToken = async (req, _, next) => {
 };
 
 const checkPermissions = async (req, res, next) => {
+  console.log(req.sessionUser);
   next();
 };
 
