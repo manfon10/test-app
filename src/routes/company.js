@@ -13,7 +13,7 @@ const {
   filterCompanyByParamsDto,
 } = require("../dtos/company.dto");
 
-const { checkToken, checkPermissions } = require("../middlewares/auth.handler");
+const { checkToken } = require("../middlewares/auth.handler");
 const { checkCookie } = require("../middlewares/cookie.handler");
 const validatorHandler = require("../middlewares/validation.handler");
 
@@ -24,7 +24,7 @@ router.use(checkToken);
 
 router.get(
   "/",
-  checkPermissions("obtener_todas_las_empresas"),
+  //checkPermissions("obtener_todas_las_empresas"),
   findAllCompanies
 );
 
