@@ -11,7 +11,7 @@ app.listen(PORT, () => {
   sequelize
     .sync({
       force: false,
-      alter: process.env.NODE_ENV === "development",
+      alter: true,
     })
     .then(() => {
       console.log(`Database Conected!`);
