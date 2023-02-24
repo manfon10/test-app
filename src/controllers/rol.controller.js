@@ -49,8 +49,9 @@ const deleteRolById = async (req, res, next) => {
 const updateRolById = async (req, res, next) => {
   try {
     const id = req.params;
+    const body = req.body;
 
-    const rol = await rolService.updateRol(id);
+    const rol = await rolService.updateRol(body, id);
 
     res.status(201).json({ message: "Rol updated", rol });
   } catch (error) {
