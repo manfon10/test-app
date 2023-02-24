@@ -11,4 +11,16 @@ const createUser = async (req, res, next) => {
   }
 };
 
-module.exports = { createUser };
+const assignPermissionToUser = async (req, res, next) => {
+  try {
+    const body = req.body;
+
+    const permission = await userService.assignPermission(body);
+
+    res.status(201).json({ permission });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { createUser, assignPermissionToUser };

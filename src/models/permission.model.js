@@ -1,9 +1,10 @@
 const { Model, DataTypes } = require("sequelize");
 
 const sequelize = require(".");
-const MenuSlug = require("./menu-slug.model");
 
+const MenuSlug = require("./menu-slug.model");
 const Rol = require("./rol.model");
+const UserPermission = require("./user-permission.model");
 
 class Permission extends Model {}
 
@@ -38,5 +39,8 @@ Permission.belongsTo(MenuSlug, {
   as: "menu_slug",
   foreignKey: "menu_slug_id",
 });
+
+Permission.hasMany(UserPermission, { foreignKey: "permission_id" });
+UserPermission.belongsTo(Permission, { foreignKey: "permission_id" });
 
 module.exports = Permission;

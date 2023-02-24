@@ -4,8 +4,8 @@ const sequelize = require(".");
 
 const Area = require("./area.model");
 const Level = require("./level.model");
-const Permission = require("./permission.model");
 const Rol = require("./rol.model");
+const UserPermission = require("./user-permission.model");
 
 class User extends Model {}
 
@@ -49,13 +49,7 @@ User.belongsTo(Level, { as: "level", foreignKey: "level_id" });
 Rol.hasMany(User, { as: "rol", foreignKey: "rol_id" });
 User.belongsTo(Rol, { as: "rol", foreignKey: "rol_id" });
 
-Permission.belongsToMany(User, {
-  as: "user_permission",
-  through: "user_permissions",
-});
-User.belongsToMany(Permission, {
-  as: "user_permission",
-  through: "user_permissions",
-});
+User.hasMany(UserPermission, { foreignKey: "user_id" });
+UserPermission.belongsTo(User, { foreignKey: "user_id" });
 
 module.exports = User;

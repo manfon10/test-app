@@ -1,8 +1,14 @@
 const Router = require("express");
 
-const { createUser } = require("../controllers/user.controller");
+const {
+  createUser,
+  assignPermissionToUser,
+} = require("../controllers/user.controller");
 
-const { createUserDto } = require("../dtos/user.dto");
+const {
+  createUserDto,
+  assignPermissionToUserDto,
+} = require("../dtos/user.dto");
 
 const { checkToken } = require("../middlewares/auth.handler");
 const { checkCookie } = require("../middlewares/cookie.handler");
@@ -13,8 +19,12 @@ const router = Router();
 router.use(checkCookie);
 router.use(checkToken);
 
-// Routes super admin
-
 router.post("/create", validatorHandler(createUserDto, "body"), createUser);
+
+router.post(
+  "/assign_permission",
+  validatorHandler(assignPermissionToUserDto, "body"),
+  assignPermissionToUser
+);
 
 module.exports = router;

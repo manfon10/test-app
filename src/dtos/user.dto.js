@@ -16,4 +16,12 @@ const createUserDto = Joi.object({
   rol_id: rol_id.required(),
 });
 
-module.exports = { createUserDto };
+const user_id = Joi.number();
+const permission_id = Joi.number();
+
+const assignPermissionToUserDto = Joi.object({
+  user_id: user_id.required(),
+  permission_id: permission_id.required(),
+});
+
+module.exports = { createUserDto, assignPermissionToUserDto };

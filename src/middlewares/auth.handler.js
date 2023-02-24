@@ -45,16 +45,27 @@ const checkToken = async (req, _, next) => {
 };
 
 const checkPermissions = (slug) => async (req, _, next) => {
-  const permissionFilter = await permissionService.findFilterPermissions({
-    slug,
-    rol_id: req.sessionUser.rol.id,
-  });
+  try {
+    const permissionByRol = await permissionService.findFilterPermissions({
+      slug,
+      rol_id: req.sessionUser.rol.id,
+    });
 
-  if (permissionFilter.length >= 1) {
-    return next();
+    const findPermission = await permissionService.findPermission({ slug });
+
+    const permissionByUser = await userService.filterPermissionByUser({
+      permission_id: findPermission.id,
+      user_id: req.sessionUser.id,
+    });
+
+    if (permissionByRol.length >= 1 || permissionByUser) {
+      return next();
+    }
+
+    return next(boom.forbidden("Permission denied"));
+  } catch (error) {
+    next(boom.notFound(error));
   }
-
-  return next(boom.forbidden("Permission denied"));
 };
 
 module.exports = { checkApiKey, checkToken, checkPermissions };

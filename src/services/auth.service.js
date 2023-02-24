@@ -47,7 +47,10 @@ const authService = {
 
     let menu_slugs = [];
 
-    const slugsFilter = await slugService.findByRol(user.rol.id);
+    const slugsFilter = await slugService.findSlugsLogin({
+      rol_id: user.rol.id,
+      user_id: user.id,
+    });
 
     slugsFilter.map((slugFilter) => {
       menu_slugs.push({
