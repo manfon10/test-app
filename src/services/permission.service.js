@@ -27,6 +27,17 @@ const permissionService = {
 
   findPermission: async (filters) => {
     const permission = await Permission.findOne({
+      include: [
+        {
+          model: Rol,
+          attributes: ["id", "name"],
+        },
+        {
+          model: MenuSlug,
+          as: "menu_slug",
+          attributes: ["id", "name", "slug", "slug_root", "icon"],
+        },
+      ],
       attributes: ["id", "name", "slug"],
       where: filters,
     });
