@@ -21,7 +21,7 @@ Permission.init(
       type: DataTypes.STRING,
     },
     slug: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.STRING,
     },
   },
