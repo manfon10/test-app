@@ -10,7 +10,11 @@ const permissionService = {
   createPermission: async (data) => {
     const slug = permissionService.generateSlugPermission(data.name);
 
-    const permission = await Permission.create({ slug, ...data });
+    const permissionCreate = await Permission.create({ slug, ...data });
+
+    const permission = await permissionService.findPermission({
+      id: permissionCreate.id,
+    });
 
     return permission;
   },
