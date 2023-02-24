@@ -31,8 +31,8 @@ Permission.init(
   }
 );
 
-Rol.hasMany(Permission, { as: "permission", foreignKey: "rol_id" });
-Permission.belongsTo(Rol, { as: "permission", foreignKey: "rol_id" });
+Rol.hasMany(Permission, { foreignKey: "rol_id" });
+Permission.belongsTo(Rol, { foreignKey: "rol_id" });
 
 MenuSlug.hasMany(Permission, { as: "menu_slug", foreignKey: "menu_slug_id" });
 Permission.belongsTo(MenuSlug, {

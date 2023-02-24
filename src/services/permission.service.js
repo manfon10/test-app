@@ -57,7 +57,6 @@ const permissionService = {
       include: [
         {
           model: Rol,
-          as: "rol",
           attributes: ["id", "name"],
         },
         {
