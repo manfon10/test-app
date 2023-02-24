@@ -8,6 +8,8 @@ const User = require("../models/user.model");
 
 const Email = require("../utils/email.util");
 const MenuSlug = require("../models/menu-slug.model");
+const Level = require("../models/level.model");
+const Area = require("../models/area.model");
 
 const userService = {
   assignPermission: async (data) => {
@@ -50,6 +52,16 @@ const userService = {
         {
           model: Rol,
           as: "rol",
+          attributes: ["id", "name"],
+        },
+        {
+          model: Level,
+          as: "level",
+          attributes: ["id", "name"],
+        },
+        {
+          model: Area,
+          as: "area",
           attributes: ["id", "name"],
         },
       ],

@@ -2,6 +2,7 @@ const boom = require("@hapi/boom");
 const MenuSlug = require("../models/menu-slug.model");
 
 const Permission = require("../models/permission.model");
+const Rol = require("../models/rol.model");
 
 const generateSlug = require("../utils/generate-slug.util");
 
@@ -53,6 +54,18 @@ const permissionService = {
 
   findPermissions: async () => {
     const permissions = await Permission.findAll({
+      include: [
+        {
+          model: Rol,
+          as: "rol",
+          attributes: ["id", "name"],
+        },
+        {
+          model: MenuSlug,
+          as: "menu_slug",
+          attributes: ["id", "name", "slug", "slug_root", "icon"],
+        },
+      ],
       attributes: ["id", "name", "slug"],
     });
 

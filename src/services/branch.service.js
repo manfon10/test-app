@@ -5,7 +5,9 @@ const Company = require("../models/company.model");
 
 const branchService = {
   createBranch: async (data) => {
-    const branch = await Branch.create(data);
+    const branchCreate = await Branch.create(data);
+
+    const branch = await branchService.findBranch({ id: branchCreate.id });
 
     return branch;
   },
