@@ -2,9 +2,7 @@ const { Model, DataTypes } = require("sequelize");
 
 const sequelize = require(".");
 
-class Area extends Model {
-  static associate(models) {}
-}
+class Area extends Model {}
 
 Area.init(
   {

@@ -5,11 +5,13 @@ const Rol = require("../models/rol.model");
 const Permission = require("../models/permission.model");
 const UserPermission = require("../models/user-permission.model");
 const User = require("../models/user.model");
-
-const Email = require("../utils/email.util");
 const MenuSlug = require("../models/menu-slug.model");
 const Level = require("../models/level.model");
 const Area = require("../models/area.model");
+const Branch = require("../models/branch.model");
+const Company = require("../models/company.model");
+
+const Email = require("../utils/email.util");
 
 const userService = {
   assignPermission: async (data) => {
@@ -30,9 +32,9 @@ const userService = {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
-    const user = await User.create({ ...data, password: passwordHash });
+    const userCreate = await User.create({ ...data, password: passwordHash });
 
-    if (user) {
+    if (userCreate) {
       await new Email(data.email).sendWelcome({
         names: data.names,
         surnames: data.surnames,
@@ -40,6 +42,8 @@ const userService = {
         email: data.email,
       });
     }
+
+    const user = await userService.findUser({ id: userCreate.id });
 
     delete user.dataValues.password;
 
@@ -63,6 +67,26 @@ const userService = {
           model: Area,
           as: "area",
           attributes: ["id", "name"],
+        },
+        {
+          model: Branch,
+          as: "branch",
+          attributes: [
+            "id",
+            "address",
+            "city",
+            "state",
+            "postal_code",
+            "email_contact",
+            "phone",
+            "email_administrator",
+            "country",
+          ],
+          include: {
+            model: Company,
+            as: "company",
+            attributes: ["id", "name", "rfc"],
+          },
         },
       ],
       attributes: ["id", "names", "surnames", "email", "password"],

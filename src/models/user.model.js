@@ -3,6 +3,7 @@ const { Model, DataTypes } = require("sequelize");
 const sequelize = require(".");
 
 const Area = require("./area.model");
+const Branch = require("./branch.model");
 const Level = require("./level.model");
 const Rol = require("./rol.model");
 const UserPermission = require("./user-permission.model");
@@ -51,5 +52,8 @@ User.belongsTo(Rol, { as: "rol", foreignKey: "rol_id" });
 
 User.hasMany(UserPermission, { foreignKey: "user_id" });
 UserPermission.belongsTo(User, { foreignKey: "user_id" });
+
+Branch.hasMany(User, { as: "branch", foreignKey: "branch_id" });
+User.belongsTo(Branch, { as: "branch", foreignKey: "branch_id" });
 
 module.exports = User;

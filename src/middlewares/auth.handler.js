@@ -58,7 +58,11 @@ const checkPermissions = (slug) => async (req, _, next) => {
       user_id: req.sessionUser.id,
     });
 
-    if (permissionByRol.length >= 1 || permissionByUser) {
+    if (
+      permissionByRol.length >= 1 ||
+      permissionByUser ||
+      req.sessionUser.rol.id === 1
+    ) {
       return next();
     }
 
