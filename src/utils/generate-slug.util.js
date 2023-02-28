@@ -1,3 +1,13 @@
+const cleanArray = (actual) => {
+  const newArray = [];
+  for (let i = 0, j = actual.length; i < j; i++) {
+    if (actual[i]) {
+      newArray.push(actual[i]);
+    }
+  }
+  return newArray;
+};
+
 const generateSlug = (title) => {
   const normalizeTitle = title
     .toLowerCase()
@@ -13,16 +23,6 @@ const generateSlug = (title) => {
   return cleanArray(normalizeTitle)
     .join("_")
     .replace(/([^a-z0-9-.])/g, "_");
-};
-
-const cleanArray = (actual) => {
-  const newArray = [];
-  for (let i = 0, j = actual.length; i < j; i++) {
-    if (actual[i]) {
-      newArray.push(actual[i]);
-    }
-  }
-  return newArray;
 };
 
 module.exports = generateSlug;

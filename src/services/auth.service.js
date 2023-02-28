@@ -8,13 +8,32 @@ const slugService = require("./slug.service");
 const userService = require("./user.service");
 
 const authService = {
+  /**
+   * Compare a password
+   * @param { String } password - Unencrypted password
+   * @param { String } passwordHash - Encrypted password
+   * @returns { Boolean } Boolean
+   */
+
   comparePassword: (password, passwordHash) => {
     return bcrypt.compare(password, passwordHash);
   },
 
+  /**
+   * Decode token
+   * @param { String } token - Token
+   * @returns { Object } Data decoded
+   */
+
   decodedToken: (token) => {
     return jwt.verify(token, `${process.env.JWT_SECRET}`);
   },
+
+  /**
+   * Generate data encoded in a token
+   * @param { Object } userData - User data to decoded
+   * @returns { Object } Token encoded
+   */
 
   generateAuthData: (userData) => {
     const user = { id: userData.id };
@@ -23,15 +42,34 @@ const authService = {
     };
   },
 
+  /**
+   * Generate token
+   * @param { Object } data - User data to decoded
+   * @returns { Object } Data encoded
+   */
+
   generateToken: (data) => {
     return jwt.sign(data, `${process.env.JWT_SECRET}`, {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
   },
 
+  /**
+   * Hash password
+   * @param { String } password - Password to hash
+   * @returns { String } Password hashed
+   */
+
   hashPassword: async (password) => {
     return await bcrypt.hash(password, 10);
   },
+
+  /**
+   * Login function
+   * @param { String } data.email - Email to user
+   * @param { String } data.password - Password to user
+   * @returns { Object } Data user login
+   */
 
   login: async (data) => {
     const user = await userService.findUser({ email: data.email });

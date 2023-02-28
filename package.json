@@ -9,7 +9,8 @@
     "seeders:run": "npx sequelize-cli db:seed:all",
     "seeder:run": "npx sequelize-cli db:seed --seed",
     "seeders:undo": "npx sequelize-cli db:seed:undo:all",
-    "seeder:undo": "npx sequelize-cli db:seed:undo --seed"
+    "seeder:undo": "npx sequelize-cli db:seed:undo --seed",
+    "lint": "npx eslint **/*.js --ignore-pattern .gitignore"
   },
   "keywords": [],
   "author": "",

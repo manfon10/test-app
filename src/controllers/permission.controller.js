@@ -16,7 +16,7 @@ const findPermissionById = async (req, res, next) => {
   try {
     const id = req.params;
 
-    const permission = await permissionService.findPermission(id);
+    const permission = await permissionService.permissionValidation(id);
 
     res.status(200).json({ permission });
   } catch (error) {

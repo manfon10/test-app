@@ -9,5 +9,9 @@ module.exports = {
   parserOptions: {
     ecmaVersion: "latest",
   },
-  rules: {},
+  rules: {
+    "no-use-before-define": "error",
+    "spaced-comment": "warn",
+    "no-duplicate-imports": "error",
+  },
 };

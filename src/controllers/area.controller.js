@@ -19,7 +19,7 @@ const getAreaById = async (req, res, next) => {
     const id = req.params;
 
     const params = {
-      id,
+      ...id,
       branch_id: req.sessionUser.branch && req.sessionUser.branch.id,
     };
 
@@ -54,7 +54,7 @@ const deleteArea = async (req, res, next) => {
     const id = req.params;
 
     const params = {
-      id,
+      ...id,
       branch_id: req.sessionUser.branch && req.sessionUser.branch.id,
     };
 
@@ -72,7 +72,7 @@ const updateArea = async (req, res, next) => {
     const body = req.body;
 
     const params = {
-      id,
+      ...id,
       branch_id: req.sessionUser.branch && req.sessionUser.branch.id,
     };
 

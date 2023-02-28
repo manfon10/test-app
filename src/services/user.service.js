@@ -14,6 +14,13 @@ const Company = require("../models/company.model");
 const Email = require("../utils/email.util");
 
 const userService = {
+  /**
+   * Assign a permission to a user
+   * @param { Number } data.user_id - User id
+   * @param { Number } data.permission_id - Permission id
+   * @returns { Object } Permissions data
+   */
+
   assignPermission: async (data) => {
     const permissionUser = await userService.validateUserPermission({
       permission_id: data.permission_id,
@@ -26,6 +33,12 @@ const userService = {
 
     return await UserPermission.create(data);
   },
+
+  /**
+   * Create a user
+   * @param { Object } data - User data
+   * @returns { Object } User data created
+   */
 
   createUser: async (data) => {
     const password = Math.random().toString(36).substring(0, 10);
@@ -50,11 +63,23 @@ const userService = {
     return user;
   },
 
+  /**
+   * Delete a user
+   * @param { Object } filters - Filters data
+   * @returns { Number } Affected rows
+   */
+
   deleteUser: async (filters) => {
     await userService.findUser(filters);
 
     return User.destroy({ where: filters });
   },
+
+  /**
+   * Get a user
+   * @param { Object } filters - Filters data
+   * @returns { Object } User data
+   */
 
   findUser: async (filters) => {
     const user = await User.findOne({
@@ -106,6 +131,12 @@ const userService = {
     return user;
   },
 
+  /**
+   * Get a users
+   * @param { Object } filters - Filters data
+   * @returns { Array } Users data
+   */
+
   findUsers: async (filters) => {
     const users = await User.findAll({
       include: [
@@ -152,6 +183,12 @@ const userService = {
     return users;
   },
 
+  /**
+   * Get slugs depending on user permission
+   * @param { Object } filters.user_id - User id
+   * @returns { Array } Slugs data
+   */
+
   findSlugsByUser: async (filters) => {
     const slugs = await UserPermission.findAll({
       attributes: ["id"],
@@ -171,6 +208,7 @@ const userService = {
   },
 
   /**
+   * Filter the permissions of a user
    * @param { Number } filters.permission_id - Permission Id
    * @param { Number } filters.user_id - User Id
    * @returns { Object } Permissions by user
@@ -190,11 +228,25 @@ const userService = {
     return permission;
   },
 
+  /**
+   * Update a user
+   * @param { Object } data - Data to update
+   * @param { Object } filters - Filters
+   * @returns { Object } Updated user
+   */
+
   updateUser: async (data, filters) => {
     await User.update(data, { where: filters });
 
     return userService.findUser(filters);
   },
+
+  /**
+   * Get permissions from a user
+   * @param { Object } filters - Filters
+   * @returns { Object } Permission by user
+   *
+   */
 
   validateUserPermission: async (filters) => {
     const permission = await UserPermission.findOne({

@@ -13,7 +13,7 @@ const {
   filterCompanyByParamsDto,
 } = require("../dtos/company.dto");
 
-const { checkToken, checkPermissions } = require("../middlewares/auth.handler");
+const { checkToken } = require("../middlewares/auth.handler");
 const { checkCookie } = require("../middlewares/cookie.handler");
 const validatorHandler = require("../middlewares/validation.handler");
 
@@ -24,34 +24,34 @@ router.use(checkToken);
 
 router.get(
   "/",
-  //checkPermissions("obtener_todas_las_empresas"),
+  // checkPermissions("obtener_todas_las_empresas"),
   findAllCompanies
 );
 
 router.get(
   "/:id",
-  //checkPermissions("obtener_empresa_por_id"),
+  // checkPermissions("obtener_empresa_por_id"),
   validatorHandler(filterCompanyByParamsDto, "params"),
   findCompanyById
 );
 
 router.delete(
   "/:id",
-  //checkPermissions("eliminar_empresa_por_id"),
+  // checkPermissions("eliminar_empresa_por_id"),
   validatorHandler(filterCompanyByParamsDto, "params"),
   deleteCompanyById
 );
 
 router.patch(
   "/:id",
-  //checkPermissions("actualizar_empresa_por_id"),
+  // checkPermissions("actualizar_empresa_por_id"),
   validatorHandler(filterCompanyByParamsDto, "params"),
   updateCompanyById
 );
 
 router.post(
   "/create_company",
-  //checkPermissions("crear_empresa"),
+  // checkPermissions("crear_empresa"),
   validatorHandler(createCompanyDto, "body"),
   createCompany
 );

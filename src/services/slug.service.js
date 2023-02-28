@@ -5,11 +5,23 @@ const permissionService = require("./permission.service");
 const userService = require("./user.service");
 
 const slugService = {
+  /**
+   * Create an MenuSlug
+   * @param { Object } data - MenuSlug data
+   * @returns { Object } MenuSlug data created
+   */
+
   createMenuSlug: async (data) => {
     const slug = await MenuSlug.create(data);
 
     return slug;
   },
+
+  /**
+   * Get MenuSlug
+   * @param { Object } filters - filters
+   * @returns { Array } MenuSlug
+   */
 
   findMenuSlug: async (filters) => {
     const slug = await MenuSlug.findOne({
@@ -24,6 +36,11 @@ const slugService = {
     return slug;
   },
 
+  /**
+   * Get MenuSlugs
+   * @returns { Array } MenuSlug
+   */
+
   findMenuSlugs: async () => {
     const slugs = await MenuSlug.findAll({
       attributes: ["id", "name", "slug", "slug_root", "icon"],
@@ -32,8 +49,15 @@ const slugService = {
     return slugs;
   },
 
+  /**
+   * Find slugs by rol_id and user_id
+   * @param { Object } filters.rol_id - Rol id
+   * @param { Object } filters.user_id - User id
+   * @returns { Array } Slugs menu to rol or user
+   */
+
   findSlugsLogin: async (filters) => {
-    const slugsRol = await permissionService.findFilterPermissions({
+    const slugsRol = await permissionService.findSlugsByPermission({
       rol_id: filters.rol_id,
     });
 

@@ -4,6 +4,12 @@ const Branch = require("../models/branch.model");
 const Company = require("../models/company.model");
 
 const branchService = {
+  /**
+   * Create an branch
+   * @param { Object } data - Area branch
+   * @returns { Object } Branch data created
+   */
+
   createBranch: async (data) => {
     const branchCreate = await Branch.create(data);
 
@@ -12,11 +18,23 @@ const branchService = {
     return branch;
   },
 
+  /**
+   * Delete an branch
+   * @param { Object } filters - filters
+   * @returns { Object } Affected rows
+   */
+
   deleteBranch: async (filters) => {
     await branchService.findBranch(filters);
 
     return await Branch.destroy({ where: filters });
   },
+
+  /**
+   * Get area
+   * @param { Object } filters - filters
+   * @returns { Array } Branc
+   */
 
   findBranch: async (filters) => {
     const branch = await Branch.findOne({
@@ -46,6 +64,12 @@ const branchService = {
     return branch;
   },
 
+  /**
+   * Get branches
+   * @param { Object } filters - filters
+   * @returns { Array } Branches
+   */
+
   findBranches: async () => {
     const branches = await Branch.findAll({
       include: {
@@ -68,6 +92,13 @@ const branchService = {
 
     return branches;
   },
+
+  /**
+   * Update an branch
+   * @param { Object } data - Branch data to update
+   * @param { Object } filters - filters
+   * @returns { Object } Branch updated
+   */
 
   updateBranch: async (data, filters) => {
     await Branch.update(data, { where: filters });
