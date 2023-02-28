@@ -13,9 +13,10 @@ const areaService = {
     return await Area.destroy({ where: filters });
   },
 
-  findAreas: async () => {
+  findAreas: async (filters) => {
     const areas = await Area.findAll({
       attributes: ["id", "name"],
+      where: filters,
     });
 
     return areas;

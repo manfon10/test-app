@@ -1,8 +1,12 @@
 const areaService = require("../services/area.service");
 
-const findAllAreas = async (_, res, next) => {
+const findAllAreas = async (req, res, next) => {
   try {
-    const areas = await areaService.findAreas();
+    const params = {
+      branch_id: req.sessionUser.branch && req.sessionUser.branch.id,
+    };
+
+    const areas = await areaService.findAreas(params);
 
     res.status(200).json({ areas });
   } catch (error) {
@@ -14,7 +18,12 @@ const findAreaById = async (req, res, next) => {
   try {
     const id = req.params;
 
-    const area = await areaService.findArea(id);
+    const params = {
+      id,
+      branch_id: req.sessionUser.branch && req.sessionUser.branch.id,
+    };
+
+    const area = await areaService.findArea(params);
 
     res.status(200).json({ area });
   } catch (error) {
@@ -44,7 +53,12 @@ const deleteArea = async (req, res, next) => {
   try {
     const id = req.params;
 
-    await areaService.deleteArea(id);
+    const params = {
+      id,
+      branch_id: req.sessionUser.branch && req.sessionUser.branch.id,
+    };
+
+    await areaService.deleteArea(params);
 
     res.status(201).json({ message: "Area deleted" });
   } catch (error) {
@@ -57,7 +71,12 @@ const updateArea = async (req, res, next) => {
     const id = req.params;
     const body = req.body;
 
-    const area = await areaService.updateArea(body, id);
+    const params = {
+      id,
+      branch_id: req.sessionUser.branch && req.sessionUser.branch.id,
+    };
+
+    const area = await areaService.updateArea(body, params);
 
     res.status(201).json({ message: "Area updated", area });
   } catch (error) {
