@@ -24,7 +24,13 @@ const findAreaById = async (req, res, next) => {
 
 const createArea = async (req, res, next) => {
   try {
-    const body = req.body;
+    const data = req.body;
+    const branch_id = req.sessionUser.branch && req.sessionUser.branch.id;
+
+    const body = {
+      ...data,
+      branch_id,
+    };
 
     const newArea = await areaService.createArea(body);
 
