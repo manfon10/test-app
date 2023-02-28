@@ -1,6 +1,6 @@
 const areaService = require("../services/area.service");
 
-const findAllAreas = async (req, res, next) => {
+const getAllAreas = async (req, res, next) => {
   try {
     const params = {
       branch_id: req.sessionUser.branch && req.sessionUser.branch.id,
@@ -14,7 +14,7 @@ const findAllAreas = async (req, res, next) => {
   }
 };
 
-const findAreaById = async (req, res, next) => {
+const getAreaById = async (req, res, next) => {
   try {
     const id = req.params;
 
@@ -85,8 +85,8 @@ const updateArea = async (req, res, next) => {
 };
 
 module.exports = {
-  findAllAreas,
-  findAreaById,
+  getAllAreas,
+  getAreaById,
   createArea,
   deleteArea,
   updateArea,

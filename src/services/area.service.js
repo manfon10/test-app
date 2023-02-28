@@ -4,7 +4,9 @@ const Area = require("../models/area.model");
 
 const areaService = {
   createArea: async (data) => {
-    return await Area.create(data);
+    const createArea = await Area.create(data);
+
+    return await areaService.findArea({ id: createArea.id });
   },
 
   deleteArea: async (filters) => {
@@ -18,6 +20,10 @@ const areaService = {
       attributes: ["id", "name"],
       where: filters,
     });
+
+    if (areas.length <= 0) {
+      throw boom.badRequest("Areas does not exist");
+    }
 
     return areas;
   },

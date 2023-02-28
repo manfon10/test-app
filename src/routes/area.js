@@ -1,8 +1,8 @@
 const Router = require("express");
 
 const {
-  findAllAreas,
-  findAreaById,
+  getAllAreas,
+  getAreaById,
   createArea,
   deleteArea,
   updateArea,
@@ -19,13 +19,13 @@ const router = Router();
 router.use(checkCookie);
 router.use(checkToken);
 
-router.get("/", /*checkPermissions("obtener_todas_las_areas"), */ findAllAreas);
+router.get("/", /*checkPermissions("obtener_todas_las_areas"), */ getAllAreas);
 
 router.get(
   "/:id",
   //checkPermissions("obtener_area_por_id"),
   validatorHandler(filterAreaByParamsDto, "params"),
-  findAreaById
+  getAreaById
 );
 
 router.delete(
