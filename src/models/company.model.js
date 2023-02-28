@@ -32,7 +32,11 @@ Company.init(
   }
 );
 
-Company.hasMany(Branch, { as: "company", foreignKey: "company_id" });
+Company.hasMany(Branch, {
+  as: "company",
+  foreignKey: "company_id",
+  onDelete: "cascade",
+});
 Branch.belongsTo(Company, { as: "company", foreignKey: "company_id" });
 
 module.exports = Company;

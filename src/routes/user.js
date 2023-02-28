@@ -3,11 +3,16 @@ const Router = require("express");
 const {
   createUser,
   assignPermissionToUser,
+  getAllUsers,
+  deleteUserById,
+  getUserById,
+  updateUserById,
 } = require("../controllers/user.controller");
 
 const {
   createUserDto,
   assignPermissionToUserDto,
+  filterUserByParamsDto,
 } = require("../dtos/user.dto");
 
 const { checkToken } = require("../middlewares/auth.handler");
@@ -18,6 +23,26 @@ const router = Router();
 
 router.use(checkCookie);
 router.use(checkToken);
+
+router.get("/", getAllUsers);
+
+router.get(
+  "/:id",
+  validatorHandler(filterUserByParamsDto, "params"),
+  getUserById
+);
+
+router.delete(
+  "/:id",
+  validatorHandler(filterUserByParamsDto, "params"),
+  deleteUserById
+);
+
+router.patch(
+  "/:id",
+  validatorHandler(filterUserByParamsDto, "params"),
+  updateUserById
+);
 
 router.post("/create", validatorHandler(createUserDto, "body"), createUser);
 

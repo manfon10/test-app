@@ -26,4 +26,12 @@ const assignPermissionToUserDto = Joi.object({
   permission_id: permission_id.required(),
 });
 
-module.exports = { createUserDto, assignPermissionToUserDto };
+const filterUserByParamsDto = Joi.object({
+  id: user_id.required(),
+});
+
+module.exports = {
+  createUserDto,
+  assignPermissionToUserDto,
+  filterUserByParamsDto,
+};

@@ -40,7 +40,10 @@ Permission.belongsTo(MenuSlug, {
   foreignKey: "menu_slug_id",
 });
 
-Permission.hasMany(UserPermission, { foreignKey: "permission_id" });
+Permission.hasMany(UserPermission, {
+  foreignKey: "permission_id",
+  onDelete: "cascade",
+});
 UserPermission.belongsTo(Permission, { foreignKey: "permission_id" });
 
 module.exports = Permission;

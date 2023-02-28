@@ -50,7 +50,7 @@ User.belongsTo(Level, { as: "level", foreignKey: "level_id" });
 Rol.hasMany(User, { as: "rol", foreignKey: "rol_id" });
 User.belongsTo(Rol, { as: "rol", foreignKey: "rol_id" });
 
-User.hasMany(UserPermission, { foreignKey: "user_id" });
+User.hasMany(UserPermission, { foreignKey: "user_id", onDelete: "cascade" });
 UserPermission.belongsTo(User, { foreignKey: "user_id" });
 
 Branch.hasMany(User, { as: "branch", foreignKey: "branch_id" });

@@ -27,7 +27,7 @@ const userService = {
     return await UserPermission.create(data);
   },
 
-  create: async (data) => {
+  createUser: async (data) => {
     const password = Math.random().toString(36).substring(0, 10);
 
     const passwordHash = await bcrypt.hash(password, 10);
@@ -48,6 +48,12 @@ const userService = {
     delete user.dataValues.password;
 
     return user;
+  },
+
+  deleteUser: async (filters) => {
+    await userService.findUser(filters);
+
+    return User.destroy({ where: filters });
   },
 
   findUser: async (filters) => {
@@ -94,10 +100,56 @@ const userService = {
     });
 
     if (!user) {
-      throw boom.badRequest("Email does not exist");
+      throw boom.badRequest("User does not exist");
     }
 
     return user;
+  },
+
+  findUsers: async (filters) => {
+    const users = await User.findAll({
+      include: [
+        {
+          model: Rol,
+          as: "rol",
+          attributes: ["id", "name"],
+        },
+        {
+          model: Level,
+          as: "level",
+          attributes: ["id", "name"],
+        },
+        {
+          model: Area,
+          as: "area",
+          attributes: ["id", "name"],
+        },
+        {
+          model: Branch,
+          as: "branch",
+          attributes: [
+            "id",
+            "address",
+            "city",
+            "state",
+            "postal_code",
+            "email_contact",
+            "phone",
+            "email_administrator",
+            "country",
+          ],
+          include: {
+            model: Company,
+            as: "company",
+            attributes: ["id", "name", "rfc"],
+          },
+        },
+      ],
+      attributes: ["id", "names", "surnames", "email", "password"],
+      where: filters,
+    });
+
+    return users;
   },
 
   findSlugsByUser: async (filters) => {
@@ -118,6 +170,12 @@ const userService = {
     return slugs;
   },
 
+  /**
+   * @param { Number } filters.permission_id - Permission Id
+   * @param { Number } filters.user_id - User Id
+   * @returns { Object } Permissions by user
+   */
+
   filterPermissionByUser: async (filters) => {
     const permission = await UserPermission.findOne({
       include: [
@@ -130,6 +188,12 @@ const userService = {
     });
 
     return permission;
+  },
+
+  updateUser: async (data, filters) => {
+    await User.update(data, { where: filters });
+
+    return userService.findUser(filters);
   },
 
   validateUserPermission: async (filters) => {
