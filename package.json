@@ -10,6 +10,7 @@
     "seeder:run": "npx sequelize-cli db:seed --seed",
     "seeders:undo": "npx sequelize-cli db:seed:undo:all",
     "seeder:undo": "npx sequelize-cli db:seed:undo --seed",
+    "config-project": "npx husky add .husky/pre-push npm run lint",
     "lint": "npx eslint **/*.js --ignore-pattern .gitignore"
   },
   "keywords": [],
