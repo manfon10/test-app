@@ -1,6 +1,7 @@
 const { Model, DataTypes } = require("sequelize");
 
 const sequelize = require(".");
+const AreaManager = require("./area-manager.model");
 
 const Area = require("./area.model");
 const Branch = require("./branch.model");
@@ -55,5 +56,13 @@ UserPermission.belongsTo(User, { foreignKey: "user_id" });
 
 Branch.hasMany(User, { as: "branch", foreignKey: "branch_id" });
 User.belongsTo(Branch, { as: "branch", foreignKey: "branch_id" });
+
+User.hasMany(AreaManager, {
+  foreignKey: "user_id",
+  onDelete: "cascade",
+});
+AreaManager.belongsTo(User, {
+  foreignKey: "user_id",
+});
 
 module.exports = User;

@@ -12,8 +12,19 @@ const Branch = require("../models/branch.model");
 const Company = require("../models/company.model");
 
 const Email = require("../utils/email.util");
+const AreaManager = require("../models/area-manager.model");
 
 const userService = {
+  /**
+   * Assign area manager
+   * @param { Object } data - User data to area manager
+   * @returns { Object } Data created
+   */
+
+  assignAreaManager: async (data) => {
+    return await AreaManager.create(data);
+  },
+
   /**
    * Assign a permission to a user
    * @param { Number } data.user_id - User id
@@ -41,11 +52,19 @@ const userService = {
    */
 
   createUser: async (data) => {
+    console.log(data);
     const password = Math.random().toString(36).substring(0, 10);
 
     const passwordHash = await bcrypt.hash(password, 10);
 
     const userCreate = await User.create({ ...data, password: passwordHash });
+
+    if (data.is_manager) {
+      await userService.assignAreaManager({
+        user_id: userCreate.id,
+        area_id: data.area_id,
+      });
+    }
 
     if (userCreate) {
       await new Email(data.email).sendWelcome({
@@ -236,6 +255,13 @@ const userService = {
    */
 
   updateUser: async (data, filters) => {
+    if (data.is_manager) {
+      await userService.assignAreaManager({
+        user_id: filters.id,
+        area_id: data.area_id,
+      });
+    }
+
     await User.update(data, { where: filters });
 
     return userService.findUser(filters);

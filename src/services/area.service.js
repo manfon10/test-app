@@ -1,6 +1,9 @@
 const boom = require("@hapi/boom");
 
+const AreaManager = require("../models/area-manager.model");
 const Area = require("../models/area.model");
+
+const userService = require("./user.service");
 
 const areaService = {
   /**
@@ -34,6 +37,8 @@ const areaService = {
    */
 
   findAreas: async (filters) => {
+    let areasResult = [];
+
     const areas = await Area.findAll({
       attributes: ["id", "name"],
       where: filters,
@@ -43,7 +48,34 @@ const areaService = {
       throw boom.badRequest("Areas does not exist");
     }
 
-    return areas;
+    const areasPromise = areas.map(async (area) => {
+      const managersArea = await areaService.findManagersArea({
+        area_id: area.id,
+      });
+
+      areasResult.push({
+        ...area.dataValues,
+      });
+
+      if (managersArea.length >= 1) {
+        const managersAreaPromise = managersArea.map(async (managerArea) => {
+          const user = await userService.findUser({ id: managerArea.user_id });
+
+          return user;
+        });
+
+        const manager = await Promise.all(managersAreaPromise);
+
+        areasResult.push({
+          ...area.dataValues,
+          area_manager: manager,
+        });
+      }
+    });
+
+    await Promise.all(areasPromise);
+
+    return areasResult;
   },
 
   /**
@@ -62,7 +94,35 @@ const areaService = {
       throw boom.badRequest("Area does not exist");
     }
 
-    return area;
+    const managersArea = await areaService.findManagersArea({
+      area_id: parseInt(filters.id),
+    });
+
+    let managerResult = {};
+
+    if (managersArea.length >= 1) {
+      const managerPromise = managersArea.map(async (managerArea) => {
+        const user = await userService.findUser({ id: managerArea.user_id });
+
+        return user;
+      });
+
+      const manager = await Promise.all(managerPromise);
+
+      managerResult.manager_area = manager;
+    }
+
+    return { ...area.dataValues, ...managerResult };
+  },
+
+  /**
+   * Get manager to area
+   * @param { Object } filters - filters
+   * @returns { Object } Manager area
+   */
+
+  findManagersArea: async (filters) => {
+    return await AreaManager.findAll({ where: filters });
   },
 
   /**

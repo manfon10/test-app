@@ -6,7 +6,7 @@ const email = Joi.string().email();
 const level_id = Joi.number();
 const area_id = Joi.number();
 const rol_id = Joi.number();
-const branch_id = Joi.number();
+const is_manager = Joi.boolean();
 
 const createUserDto = Joi.object({
   names: names.required(),
@@ -15,7 +15,7 @@ const createUserDto = Joi.object({
   level_id: level_id.required(),
   area_id: area_id.required(),
   rol_id: rol_id.required(),
-  branch_id: branch_id.required(),
+  is_manager: is_manager.required(),
 });
 
 const user_id = Joi.number();
