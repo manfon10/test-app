@@ -61,6 +61,8 @@ const areaService = {
         const managersAreaPromise = managersArea.map(async (managerArea) => {
           const user = await userService.findUser({ id: managerArea.user_id });
 
+          delete user.dataValues.password;
+
           return user;
         });
 
@@ -103,6 +105,8 @@ const areaService = {
     if (managersArea.length >= 1) {
       const managerPromise = managersArea.map(async (managerArea) => {
         const user = await userService.findUser({ id: managerArea.user_id });
+
+        delete user.dataValues.password;
 
         return user;
       });

@@ -78,6 +78,19 @@ const updateUserById = async (req, res, next) => {
   }
 };
 
+const updatePasswordByUser = async (req, res, next) => {
+  try {
+    const user_id = req.sessionUser.id;
+    const body = req.body;
+
+    await userService.updatePassword(body, { id: parseInt(user_id) });
+
+    res.status(201).json({ message: "Password updated" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createUser,
   assignPermissionToUser,
@@ -85,4 +98,5 @@ module.exports = {
   deleteUserById,
   getUserById,
   updateUserById,
+  updatePasswordByUser,
 };

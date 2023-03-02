@@ -35,6 +35,10 @@ User.init(
       allowNull: false,
       type: DataTypes.STRING,
     },
+    is_first_login: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
   },
   {
     timestamps: true,

@@ -10,9 +10,9 @@ const Level = require("../models/level.model");
 const Area = require("../models/area.model");
 const Branch = require("../models/branch.model");
 const Company = require("../models/company.model");
+const AreaManager = require("../models/area-manager.model");
 
 const Email = require("../utils/email.util");
-const AreaManager = require("../models/area-manager.model");
 
 const userService = {
   /**
@@ -139,7 +139,14 @@ const userService = {
           },
         },
       ],
-      attributes: ["id", "names", "surnames", "email", "password"],
+      attributes: [
+        "id",
+        "names",
+        "surnames",
+        "email",
+        "password",
+        "is_first_login",
+      ],
       where: filters,
     });
 
@@ -195,7 +202,7 @@ const userService = {
           },
         },
       ],
-      attributes: ["id", "names", "surnames", "email", "password"],
+      attributes: ["id", "names", "surnames", "email", "is_first_login"],
       where: filters,
     });
 
@@ -265,6 +272,33 @@ const userService = {
     await User.update(data, { where: filters });
 
     return userService.findUser(filters);
+  },
+
+  /**
+   * Update password a user
+   * @param { Object } data - Data new password
+   * @param { Object } filters - Filters
+   * @returns { Object } Updated user password
+   */
+
+  updatePassword: async (data, filters) => {
+    const user = await userService.findUser(filters);
+
+    const passwordCompare = await bcrypt.compare(
+      data.current_password,
+      user.password
+    );
+
+    if (!passwordCompare) {
+      throw boom.badRequest("The password does not match.");
+    }
+
+    const passwordHash = await bcrypt.hash(data.new_password, 10);
+
+    return userService.updateUser(
+      { password: passwordHash, is_first_login: false },
+      { id: user.id }
+    );
   },
 
   /**

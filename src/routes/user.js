@@ -7,12 +7,14 @@ const {
   deleteUserById,
   getUserById,
   updateUserById,
+  updatePasswordByUser,
 } = require("../controllers/user.controller");
 
 const {
   createUserDto,
   assignPermissionToUserDto,
   filterUserByParamsDto,
+  updatePasswordDto,
 } = require("../dtos/user.dto");
 
 const { checkToken } = require("../middlewares/auth.handler");
@@ -36,6 +38,12 @@ router.delete(
   "/:id",
   validatorHandler(filterUserByParamsDto, "params"),
   deleteUserById
+);
+
+router.patch(
+  "/password_update",
+  validatorHandler(updatePasswordDto, "body"),
+  updatePasswordByUser
 );
 
 router.patch(

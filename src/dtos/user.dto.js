@@ -30,8 +30,17 @@ const filterUserByParamsDto = Joi.object({
   id: user_id.required(),
 });
 
+const current_password = Joi.string();
+const new_password = Joi.string();
+
+const updatePasswordDto = Joi.object({
+  current_password: current_password.required(),
+  new_password: new_password.required(),
+});
+
 module.exports = {
   createUserDto,
   assignPermissionToUserDto,
   filterUserByParamsDto,
+  updatePasswordDto,
 };
