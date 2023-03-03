@@ -1,16 +1,24 @@
 extends baseEmail
 
 block emailContent
-
-    p 
+  tr
+    td.es-p15t.es-p15b(align='center')
+      h1(style='color: #333333; font-size: 20px; font-weight: normal;')
+        b Cambio de Contraseña
+  tr
+    td.es-p40r.es-p40l(align='center')
+      p 
       | Hola, 
       span(style='font-weight: bold;') #{name} 
-
-      br
-      | Se ha solicitado modificar su contraseña. Mediante 
-      a(style='font-weight: bold;' href=url) éste enlace 
-      | puede cambiarla.
-
+  tr
+    td.es-p35r.es-p40l(align='center')
+      p
+        | Se ha solicitado modificar su contraseña. Mediante 
+        a(style='font-weight: bold;' href=url) éste enlace 
+        | puede cambiarla.
+  tr
+    td.es-p35r.es-p40l(align='center')
       p 
         | Este enlace es valido solo por 5 minutos.
-        br
+  tr
+    td.es-p15t.es-p15b(align='center')
