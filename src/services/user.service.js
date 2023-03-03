@@ -281,16 +281,18 @@ const userService = {
    * @returns { Object } Updated user password
    */
 
-  updatePassword: async (data, filters) => {
+  updatePassword: async (data, filters, is_forgot = false) => {
     const user = await userService.findUser(filters);
 
-    const passwordCompare = await bcrypt.compare(
-      data.current_password,
-      user.password
-    );
+    if (!is_forgot) {
+      const passwordCompare = await bcrypt.compare(
+        data.current_password,
+        user.password
+      );
 
-    if (!passwordCompare) {
-      throw boom.badRequest("The password does not match.");
+      if (!passwordCompare) {
+        throw boom.badRequest("The password does not match.");
+      }
     }
 
     const passwordHash = await bcrypt.hash(data.new_password, 10);

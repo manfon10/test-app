@@ -38,9 +38,14 @@ const updatePasswordDto = Joi.object({
   new_password: new_password.required(),
 });
 
+const updatePasswordForgotDto = Joi.object({
+  new_password: new_password.required(),
+});
+
 module.exports = {
   createUserDto,
   assignPermissionToUserDto,
   filterUserByParamsDto,
   updatePasswordDto,
+  updatePasswordForgotDto,
 };

@@ -8,6 +8,7 @@ const {
   getUserById,
   updateUserById,
   updatePasswordByUser,
+  updatePasswordByUserForgot,
 } = require("../controllers/user.controller");
 
 const {
@@ -15,6 +16,7 @@ const {
   assignPermissionToUserDto,
   filterUserByParamsDto,
   updatePasswordDto,
+  updatePasswordForgotDto,
 } = require("../dtos/user.dto");
 
 const { checkToken } = require("../middlewares/auth.handler");
@@ -44,6 +46,12 @@ router.patch(
   "/password_update",
   validatorHandler(updatePasswordDto, "body"),
   updatePasswordByUser
+);
+
+router.patch(
+  "/password_update_forgot",
+  validatorHandler(updatePasswordForgotDto, "body"),
+  updatePasswordByUserForgot
 );
 
 router.patch(
