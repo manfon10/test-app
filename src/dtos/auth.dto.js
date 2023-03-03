@@ -8,4 +8,8 @@ const loginUserDto = Joi.object({
   password: password.required(),
 });
 
-module.exports = { loginUserDto };
+const forgotPasswordDto = Joi.object({
+  email: email.required(),
+});
+
+module.exports = { loginUserDto, forgotPasswordDto };

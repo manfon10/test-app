@@ -5,6 +5,18 @@ const {
 
 const authService = require("../services/auth.service");
 
+const forgotPassworByUser = async (req, res, next) => {
+  try {
+    const body = req.body;
+
+    await authService.forgotPassword(body);
+
+    res.status(201).json({ message: "Email send!" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const loginUser = async (req, res, next) => {
   try {
     const body = req.body;
@@ -25,4 +37,4 @@ const logoutUser = (_, res, next) => {
   }
 };
 
-module.exports = { loginUser, logoutUser };
+module.exports = { loginUser, logoutUser, forgotPassworByUser };

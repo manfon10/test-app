@@ -51,6 +51,10 @@ class Email {
   async sendWelcome(data) {
     await this.send("welcome", "Registro Exitoso", { ...data });
   }
+
+  async forgotPassword(data) {
+    await this.send("forgot", `Cambio de Contraseña`, { ...data });
+  }
 }
 
 module.exports = Email;

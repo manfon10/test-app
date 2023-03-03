@@ -1,0 +1,16 @@
+extends baseEmail
+
+block emailContent
+
+    p 
+      | Hola, 
+      span(style='font-weight: bold;') #{name} 
+
+      br
+      | Se ha solicitado modificar su contraseña. Mediante 
+      a(style='font-weight: bold;' href=url) éste enlace 
+      | puede cambiarla.
+
+      p 
+        | Este enlace es valido solo por 5 minutos.
+        br

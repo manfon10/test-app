@@ -1,12 +1,22 @@
 const Router = require("express");
 
-const { loginUser, logoutUser } = require("../controllers/auth.controller");
+const {
+  loginUser,
+  logoutUser,
+  forgotPassworByUser,
+} = require("../controllers/auth.controller");
 
-const { loginUserDto } = require("../dtos/auth.dto");
+const { loginUserDto, forgotPasswordDto } = require("../dtos/auth.dto");
 
 const validatorHandler = require("../middlewares/validation.handler");
 
 const router = Router();
+
+router.post(
+  "/forgot_password",
+  validatorHandler(forgotPasswordDto, "body"),
+  forgotPassworByUser
+);
 
 router.post("/login", validatorHandler(loginUserDto, "body"), loginUser);
 

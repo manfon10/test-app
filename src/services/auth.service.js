@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const { filterUniqueValues } = require("../utils/array.util");
+const Email = require("../utils/email.util");
 
 const slugService = require("./slug.service");
 const userService = require("./user.service");
@@ -29,6 +30,19 @@ const authService = {
     return jwt.verify(token, `${process.env.JWT_SECRET}`);
   },
 
+  forgotPassword: async (data) => {
+    const user = await userService.findUser({ email: data.email });
+
+    const token = authService.generateTokenEmail({ id: user.id });
+
+    const url = `${process.env.APP_FRONT_HOST}/password-recovery/${token}`;
+
+    await new Email(user.email).forgotPassword({
+      name: `${user.names} ${user.surnames}`,
+      url,
+    });
+  },
+
   /**
    * Generate data encoded in a token
    * @param { Object } userData - User data to decoded
@@ -51,6 +65,18 @@ const authService = {
   generateToken: (data) => {
     return jwt.sign(data, `${process.env.JWT_SECRET}`, {
       expiresIn: process.env.JWT_EXPIRES_IN,
+    });
+  },
+
+  /**
+   * Generate token to email
+   * @param { Object } data - User data to decoded
+   * @returns { Object } Data encoded
+   */
+
+  generateTokenEmail: (data) => {
+    return jwt.sign(data, `${process.env.JWT_SECRET}`, {
+      expiresIn: "5m",
     });
   },
 

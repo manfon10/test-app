@@ -2,6 +2,7 @@ const boom = require("@hapi/boom");
 
 const AreaManager = require("../models/area-manager.model");
 const Area = require("../models/area.model");
+const User = require("../models/user.model");
 
 const userService = require("./user.service");
 
@@ -41,6 +42,14 @@ const areaService = {
 
     const areas = await Area.findAll({
       attributes: ["id", "name"],
+      include: {
+        model: AreaManager,
+        as: "area_manager",
+        include: {
+          model: User,
+          attributes: ["id"],
+        },
+      },
       where: filters,
     });
 
@@ -49,28 +58,28 @@ const areaService = {
     }
 
     const areasPromise = areas.map(async (area) => {
-      const managersArea = await areaService.findManagersArea({
-        area_id: area.id,
-      });
+      if (area.area_manager.length >= 1) {
+        let managers = [];
 
-      areasResult.push({
-        ...area.dataValues,
-      });
+        const managerPromise = area.area_manager.map(async (areaManager) => {
+          const manager = await userService.findUser({
+            id: areaManager.user_id,
+          });
 
-      if (managersArea.length >= 1) {
-        const managersAreaPromise = managersArea.map(async (managerArea) => {
-          const user = await userService.findUser({ id: managerArea.user_id });
-
-          delete user.dataValues.password;
-
-          return user;
+          managers.push(manager);
         });
-
-        const manager = await Promise.all(managersAreaPromise);
 
         areasResult.push({
           ...area.dataValues,
-          area_manager: manager,
+          area_manager: managers,
+        });
+
+        await Promise.all(managerPromise);
+      } else {
+        delete area.dataValues.area_manager;
+
+        areasResult.push({
+          ...area.dataValues,
         });
       }
     });
