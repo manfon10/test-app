@@ -68,10 +68,6 @@ const projectService = {
       where: filters,
     });
 
-    if (!projects.length >= 1) {
-      throw boom.badRequest("Project does not exist");
-    }
-
     return projects;
   },
 

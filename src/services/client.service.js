@@ -92,10 +92,6 @@ const clientService = {
       where: filters,
     });
 
-    if (!clients.length >= 1) {
-      throw boom.badRequest("Client does not exist");
-    }
-
     return clients;
   },
 

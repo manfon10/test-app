@@ -53,10 +53,6 @@ const areaService = {
       where: filters,
     });
 
-    if (areas.length <= 0) {
-      throw boom.badRequest("Areas does not exist");
-    }
-
     const areasPromise = areas.map(async (area) => {
       if (area.area_manager.length >= 1) {
         let managers = [];
