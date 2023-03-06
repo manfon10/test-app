@@ -1,6 +1,7 @@
 const boom = require("@hapi/boom");
 
 const Client = require("../models/client.model");
+const Product = require("../models/product.model");
 const Project = require("../models/project.model");
 
 const clientService = {
@@ -40,6 +41,17 @@ const clientService = {
         model: Project,
         as: "project",
         attributes: ["id", "name"],
+        include: {
+          model: Product,
+          as: "product",
+          attributes: [
+            "id",
+            "name",
+            "part_number",
+            "cycle_time",
+            "engineering_level",
+          ],
+        },
       },
       attributes: ["id", "name"],
       where: filters,
@@ -64,10 +76,25 @@ const clientService = {
         model: Project,
         as: "project",
         attributes: ["id", "name"],
+        include: {
+          model: Product,
+          as: "product",
+          attributes: [
+            "id",
+            "name",
+            "part_number",
+            "cycle_time",
+            "engineering_level",
+          ],
+        },
       },
       attributes: ["id", "name"],
       where: filters,
     });
+
+    if (!clients.length >= 1) {
+      throw boom.badRequest("Client does not exist");
+    }
 
     return clients;
   },

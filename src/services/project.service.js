@@ -1,4 +1,5 @@
 const boom = require("@hapi/boom");
+const Client = require("../models/client.model");
 
 const Project = require("../models/project.model");
 
@@ -22,7 +23,7 @@ const projectService = {
    */
 
   deleteProject: async (filters) => {
-    await projectService.findClient(filters);
+    await projectService.findProject(filters);
 
     return await Project.destroy({ where: filters });
   },
@@ -35,6 +36,11 @@ const projectService = {
 
   findProject: async (filters) => {
     const project = await Project.findOne({
+      include: {
+        model: Client,
+        as: "client",
+        attributes: ["id", "name"],
+      },
       attributes: ["id", "name"],
       where: filters,
     });
@@ -48,21 +54,30 @@ const projectService = {
 
   /**
    * Get projects
-   * @param { Object } filters - filters
    * @returns { Object } Projects data
    */
 
-  findProjects: async () => {
+  findProjects: async (filters) => {
     const projects = await Project.findAll({
+      include: {
+        model: Client,
+        as: "client",
+        attributes: ["id", "name"],
+      },
       attributes: ["id", "name"],
+      where: filters,
     });
+
+    if (!projects.length >= 1) {
+      throw boom.badRequest("Project does not exist");
+    }
 
     return projects;
   },
 
   /**
    * Update project
-   * @param { Object } data - Data client to update
+   * @param { Object } data - Data project to update
    * @param { Object } filters - filters
    * @returns { Object } Project data update
    */

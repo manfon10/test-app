@@ -16,6 +16,10 @@ Project.init(
       allowNull: false,
       type: DataTypes.STRING,
     },
+    branch_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
   {
     timestamps: true,
