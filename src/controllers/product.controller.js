@@ -33,7 +33,7 @@ const getAllProducts = async (req, res, next) => {
   try {
     const branch_id = req.sessionUser.branch && req.sessionUser.branch.id;
 
-    const products = await productService.findProducts(branch_id);
+    const products = await productService.findProducts({ branch_id });
 
     res.status(200).json({ products });
   } catch (error) {

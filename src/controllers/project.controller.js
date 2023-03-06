@@ -33,7 +33,7 @@ const getAllProjects = async (req, res, next) => {
   try {
     const branch_id = req.sessionUser.branch && req.sessionUser.branch.id;
 
-    const projects = await projectService.findProjects(branch_id);
+    const projects = await projectService.findProjects({ branch_id });
 
     res.status(200).json({ projects });
   } catch (error) {
