@@ -2,6 +2,8 @@ const { Model, DataTypes } = require("sequelize");
 
 const sequelize = require(".");
 
+const Project = require("./project.model");
+
 class Client extends Model {}
 
 Client.init(
@@ -26,5 +28,12 @@ Client.init(
     sequelize,
   }
 );
+
+Client.hasMany(Project, { as: "project", foreignKey: "client_id" });
+Project.belongsTo(Client, {
+  as: "client",
+  foreignKey: "client_id",
+  onDelete: "cascade",
+});
 
 module.exports = Client;

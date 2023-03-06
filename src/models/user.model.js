@@ -1,8 +1,8 @@
 const { Model, DataTypes } = require("sequelize");
 
 const sequelize = require(".");
-const AreaManager = require("./area-manager.model");
 
+const AreaManager = require("./area-manager.model");
 const Area = require("./area.model");
 const Branch = require("./branch.model");
 const Level = require("./level.model");

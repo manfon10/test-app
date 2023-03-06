@@ -1,6 +1,7 @@
 const boom = require("@hapi/boom");
 
 const Client = require("../models/client.model");
+const Project = require("../models/project.model");
 
 const clientService = {
   /**
@@ -35,6 +36,11 @@ const clientService = {
 
   findClient: async (filters) => {
     const client = await Client.findOne({
+      include: {
+        model: Project,
+        as: "project",
+        attributes: ["id", "name"],
+      },
       attributes: ["id", "name"],
       where: filters,
     });
@@ -54,6 +60,11 @@ const clientService = {
 
   findClients: async (filters) => {
     const clients = await Client.findAll({
+      include: {
+        model: Project,
+        as: "project",
+        attributes: ["id", "name"],
+      },
       attributes: ["id", "name"],
       where: filters,
     });
