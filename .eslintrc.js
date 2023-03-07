@@ -13,5 +13,6 @@ module.exports = {
     "no-use-before-define": "error",
     "spaced-comment": "warn",
     "no-duplicate-imports": "error",
+    "no-console": "warn",
   },
 };

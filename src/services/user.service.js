@@ -52,7 +52,6 @@ const userService = {
    */
 
   createUser: async (data) => {
-    console.log(data);
     const password = Math.random().toString(36).substring(0, 10);
 
     const passwordHash = await bcrypt.hash(password, 10);

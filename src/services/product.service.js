@@ -1,6 +1,10 @@
 const boom = require("@hapi/boom");
 
 const Product = require("../models/product.model");
+const Project = require("../models/project.model");
+const Client = require("../models/client.model");
+
+const userService = require("./user.service");
 
 const productService = {
   /**
@@ -59,18 +63,45 @@ const productService = {
    */
 
   findProducts: async (filters) => {
+    let productsResult = [];
+
     const products = await Product.findAll({
+      include: {
+        model: Project,
+        as: "project",
+        attributes: ["id", "name"],
+        include: {
+          model: Client,
+          as: "client",
+          attributes: ["id", "name"],
+        },
+      },
       attributes: [
         "id",
         "name",
         "part_number",
         "cycle_time",
         "engineering_level",
+        "auditor_id",
       ],
       where: filters,
     });
 
-    return products;
+    const productsPromise = products.map(async (product) => {
+      const auditor = await userService.findUser({ id: product.auditor_id });
+
+      delete auditor.dataValues.password;
+      delete product.dataValues.auditor_id;
+
+      productsResult.push({
+        ...product.dataValues,
+        auditor,
+      });
+    });
+
+    await Promise.all(productsPromise);
+
+    return productsResult;
   },
 
   /**
