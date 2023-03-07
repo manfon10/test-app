@@ -53,7 +53,9 @@ const productService = {
       throw boom.badRequest("Product does not exist");
     }
 
-    return product;
+    const auditor = await userService.findUser({ id: product.auditor_id });
+
+    return { ...product.dataValues, auditor };
   },
 
   /**
