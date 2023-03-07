@@ -45,6 +45,7 @@ const productService = {
         "part_number",
         "cycle_time",
         "engineering_level",
+        "auditor_id",
       ],
       where: filters,
     });
