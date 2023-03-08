@@ -7,7 +7,7 @@ const {
 
 const { createSlugMenuDto } = require("../dtos/slug.dto");
 
-const { checkToken } = require("../middlewares/auth.handler");
+const { checkToken, checkPermissions } = require("../middlewares/auth.handler");
 const { checkCookie } = require("../middlewares/cookie.handler");
 const validatorHandler = require("../middlewares/validation.handler");
 
@@ -16,8 +16,13 @@ const router = Router();
 router.use(checkCookie);
 router.use(checkToken);
 
-router.get("/", findAllMenuSlugs);
+router.get("/", checkPermissions("visualizar_enlaces"), findAllMenuSlugs);
 
-router.post("/", validatorHandler(createSlugMenuDto, "body"), createMenuSlug);
+router.post(
+  "/",
+  checkPermissions("crear_enlace"),
+  validatorHandler(createSlugMenuDto, "body"),
+  createMenuSlug
+);
 
 module.exports = router;

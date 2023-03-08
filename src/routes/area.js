@@ -10,7 +10,7 @@ const {
 
 const { filterAreaByParamsDto, createAreaDto } = require("../dtos/area.dto");
 
-const { checkToken } = require("../middlewares/auth.handler");
+const { checkToken, checkPermissions } = require("../middlewares/auth.handler");
 const { checkCookie } = require("../middlewares/cookie.handler");
 const validatorHandler = require("../middlewares/validation.handler");
 
@@ -19,32 +19,32 @@ const router = Router();
 router.use(checkCookie);
 router.use(checkToken);
 
-router.get("/", /* checkPermissions("obtener_todas_las_areas"), */ getAllAreas);
+router.get("/", checkPermissions("visualizar_areas"), getAllAreas);
 
 router.get(
   "/:id",
-  // checkPermissions("obtener_area_por_id"),
+  checkPermissions("visualizar_area"),
   validatorHandler(filterAreaByParamsDto, "params"),
   getAreaById
 );
 
 router.delete(
   "/:id",
-  // checkPermissions("eliminar_area_por_id"),
+  checkPermissions("eliminar_area"),
   validatorHandler(filterAreaByParamsDto, "params"),
   deleteArea
 );
 
 router.patch(
   "/:id",
-  // checkPermissions("actualizar_area_por_id"),
+  checkPermissions("actualizar_area"),
   validatorHandler(filterAreaByParamsDto, "params"),
   updateArea
 );
 
 router.post(
   "/",
-  // checkPermissions("crear_area"),
+  checkPermissions("crear_area"),
   validatorHandler(createAreaDto, "body"),
   createArea
 );
