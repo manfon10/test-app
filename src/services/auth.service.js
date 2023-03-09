@@ -107,7 +107,7 @@ const authService = {
       throw boom.badRequest("Wrong credentials");
     }
 
-    delete user.dataValues.password;
+    delete user.password;
 
     let menu_slugs = [];
 

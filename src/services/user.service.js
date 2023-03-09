@@ -76,7 +76,7 @@ const userService = {
 
     const user = await userService.findUser({ id: userCreate.id });
 
-    delete user.dataValues.password;
+    delete user.password;
 
     return user;
   },
@@ -153,7 +153,11 @@ const userService = {
       throw boom.badRequest("User does not exist");
     }
 
-    return user;
+    const isManager = await AreaManager.findOne({
+      where: { user_id: user.id },
+    });
+
+    return { ...user.dataValues, is_manager: isManager ? true : false };
   },
 
   /**
@@ -163,6 +167,8 @@ const userService = {
    */
 
   findUsers: async (filters) => {
+    let usersResult = [];
+
     const users = await User.findAll({
       include: [
         {
@@ -205,7 +211,20 @@ const userService = {
       where: filters,
     });
 
-    return users;
+    const isManagerPromise = users.map(async (user) => {
+      const isManager = await AreaManager.findOne({
+        where: { user_id: user.id },
+      });
+
+      usersResult.push({
+        ...user.dataValues,
+        is_manager: isManager ? true : false,
+      });
+    });
+
+    await Promise.all(isManagerPromise);
+
+    return usersResult;
   },
 
   /**

@@ -39,6 +39,16 @@ const productService = {
 
   findProduct: async (filters) => {
     const product = await Product.findOne({
+      include: {
+        model: Project,
+        as: "project",
+        attributes: ["id", "name"],
+        include: {
+          model: Client,
+          as: "client",
+          attributes: ["id", "name"],
+        },
+      },
       attributes: [
         "id",
         "name",
@@ -56,6 +66,7 @@ const productService = {
 
     const auditor = await userService.findUser({ id: product.auditor_id });
 
+    delete auditor.password;
     delete product.dataValues.auditor_id;
 
     return { ...product.dataValues, auditor };
@@ -95,7 +106,7 @@ const productService = {
     const productsPromise = products.map(async (product) => {
       const auditor = await userService.findUser({ id: product.auditor_id });
 
-      delete auditor.dataValues.password;
+      delete auditor.password;
       delete product.dataValues.auditor_id;
 
       productsResult.push({

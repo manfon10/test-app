@@ -19,7 +19,7 @@ const {
   updatePasswordForgotDto,
 } = require("../dtos/user.dto");
 
-const { checkToken } = require("../middlewares/auth.handler");
+const { checkToken, checkPermissions } = require("../middlewares/auth.handler");
 const { checkCookie } = require("../middlewares/cookie.handler");
 const validatorHandler = require("../middlewares/validation.handler");
 
@@ -28,16 +28,18 @@ const router = Router();
 router.use(checkCookie);
 router.use(checkToken);
 
-router.get("/", getAllUsers);
+router.get("/", checkPermissions("visualizar_usuarios"), getAllUsers);
 
 router.get(
   "/:id",
+  checkPermissions("visualizar_usuario"),
   validatorHandler(filterUserByParamsDto, "params"),
   getUserById
 );
 
 router.delete(
   "/:id",
+  checkPermissions("eliminar_usuario"),
   validatorHandler(filterUserByParamsDto, "params"),
   deleteUserById
 );
@@ -56,14 +58,21 @@ router.patch(
 
 router.patch(
   "/:id",
+  checkPermissions("actualizar_usuario"),
   validatorHandler(filterUserByParamsDto, "params"),
   updateUserById
 );
 
-router.post("/create", validatorHandler(createUserDto, "body"), createUser);
+router.post(
+  "/create",
+  checkPermissions("crear_usuario"),
+  validatorHandler(createUserDto, "body"),
+  createUser
+);
 
 router.post(
   "/assign_permission",
+  checkPermissions("asignar_permiso_a_usuario"),
   validatorHandler(assignPermissionToUserDto, "body"),
   assignPermissionToUser
 );

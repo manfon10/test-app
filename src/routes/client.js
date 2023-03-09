@@ -13,7 +13,7 @@ const {
   filterClientByParamsDto,
 } = require("../dtos/client.dto");
 
-const { checkToken } = require("../middlewares/auth.handler");
+const { checkToken, checkPermissions } = require("../middlewares/auth.handler");
 const { checkCookie } = require("../middlewares/cookie.handler");
 const validatorHandler = require("../middlewares/validation.handler");
 
@@ -22,26 +22,34 @@ const router = Router();
 router.use(checkCookie);
 router.use(checkToken);
 
-router.get("/", getAllClients);
+router.get("/", checkPermissions("visualizar_clientes"), getAllClients);
 
 router.get(
   "/:id",
+  checkPermissions("visualizar_cliente"),
   validatorHandler(filterClientByParamsDto, "params"),
   getClientByid
 );
 
 router.delete(
   "/:id",
+  checkPermissions("eliminar_cliente"),
   validatorHandler(filterClientByParamsDto, "params"),
   deleteClientById
 );
 
 router.patch(
   "/:id",
+  checkPermissions("actualizar_cliente"),
   validatorHandler(filterClientByParamsDto, "params"),
   updateClientById
 );
 
-router.post("/", validatorHandler(createClientDto, "body"), createClient);
+router.post(
+  "/",
+  checkPermissions("crear_cliente"),
+  validatorHandler(createClientDto, "body"),
+  createClient
+);
 
 module.exports = router;
