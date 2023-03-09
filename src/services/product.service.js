@@ -39,16 +39,6 @@ const productService = {
 
   findProduct: async (filters) => {
     const product = await Product.findOne({
-      include: {
-        model: Project,
-        as: "project",
-        attributes: ["id", "name"],
-        include: {
-          model: Client,
-          as: "client",
-          attributes: ["id", "name"],
-        },
-      },
       attributes: [
         "id",
         "name",
