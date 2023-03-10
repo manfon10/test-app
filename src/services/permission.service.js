@@ -1,12 +1,29 @@
 const boom = require("@hapi/boom");
-const MenuSlug = require("../models/menu-slug.model");
 
 const Permission = require("../models/permission.model");
-const Rol = require("../models/rol.model");
+const RolPermission = require("../models/rol-permission.model");
 
 const generateSlug = require("../utils/generate-slug.util");
 
 const permissionService = {
+  /**
+   * Assign permission to rol or user
+   * @param { Object } data - Permission data to sassign
+   * @returns { Object } Data created
+   */
+  assignPermission: async (data) => {
+    const permission = await permissionService.findPermissionByRol({
+      permission_id: data.permission_id,
+      rol_id: data.rol_id,
+    });
+
+    if (permission) {
+      throw boom.notFound("Permission already has that rol");
+    }
+
+    return RolPermission.create(data);
+  },
+
   /**
    * Create an permission
    * @param { Object } data - Permission data
@@ -16,7 +33,14 @@ const permissionService = {
   createPermission: async (data) => {
     const slug = permissionService.generateSlugPermission(data.name);
 
-    const permissionCreate = await Permission.create({ slug, ...data });
+    const permissionCreate = await Permission.create({ slug, name: data.name });
+
+    if (data.rol_id) {
+      await RolPermission.create({
+        rol_id: data.rol_id,
+        permission_id: permissionCreate.id,
+      });
+    }
 
     const permission = await permissionService.permissionValidation({
       id: permissionCreate.id,
@@ -48,19 +72,13 @@ const permissionService = {
   },
 
   /**
-   * Find slugs with permission
-   * @param { Object } filters - filters
-   * @returns { Array } Slugs menu
+   * Get All Permisions
+   * @returns { Array } Permissions
    */
 
-  findSlugsByPermission: async (filters) => {
+  findPermissions: async (filters = {}) => {
     const permissions = await Permission.findAll({
-      include: {
-        model: MenuSlug,
-        as: "menu_slug",
-        attributes: ["name", "slug", "slug_root", "icon"],
-      },
-      attributes: ["menu_slug_id", "id", "name", "slug"],
+      attributes: ["id", "name", "slug"],
       where: filters,
     });
 
@@ -68,48 +86,13 @@ const permissionService = {
   },
 
   /**
-   * Get All Permisions
-   * @returns { Array } Permissions
-   */
-
-  findPermissions: async () => {
-    const permissions = await Permission.findAll({
-      include: [
-        {
-          model: Rol,
-          attributes: ["id", "name"],
-        },
-        {
-          model: MenuSlug,
-          as: "menu_slug",
-          attributes: ["id", "name", "slug", "slug_root", "icon"],
-        },
-      ],
-      attributes: ["id", "name", "slug"],
-    });
-
-    return permissions;
-  },
-
-  /**
-   * Permission validation
+   * Get permission
    * @param { Object } filters - filters
    * @returns { Object } Permission
    */
 
-  permissionValidation: async (filters) => {
+  findPermission: async (filters) => {
     const permission = await Permission.findOne({
-      include: [
-        {
-          model: Rol,
-          attributes: ["id", "name"],
-        },
-        {
-          model: MenuSlug,
-          as: "menu_slug",
-          attributes: ["id", "name", "slug", "slug_root", "icon"],
-        },
-      ],
       attributes: ["id", "name", "slug"],
       where: filters,
     });
@@ -119,6 +102,34 @@ const permissionService = {
     }
 
     return permission;
+  },
+
+  /**
+   * Get permission by rol
+   * @param { Object } filters - filters
+   * @returns { Object } Permissions
+   */
+
+  findPermissionByRol: async (filters) => {
+    const permission = await RolPermission.findOne({
+      where: filters,
+    });
+
+    return permission;
+  },
+
+  /**
+   * Get permissions by rol
+   * @param { Object } filters - filters
+   * @returns { Object } Permissions
+   */
+
+  findPermissionsByRol: async (filters) => {
+    const permissions = await RolPermission.findAll({
+      where: filters,
+    });
+
+    return permissions;
   },
 
   /**

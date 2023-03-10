@@ -59,10 +59,23 @@ const updatePermissionById = async (req, res, next) => {
   }
 };
 
+const assignPermissionToRol = async (req, res, next) => {
+  try {
+    const body = req.body;
+
+    const permission = await permissionService.assignPermission(body);
+
+    res.status(201).json({ permission });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createPermission,
   findPermissionById,
   findAllPermissions,
   deletePermissionByid,
   updatePermissionById,
+  assignPermissionToRol,
 };

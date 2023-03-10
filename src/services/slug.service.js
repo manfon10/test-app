@@ -1,10 +1,30 @@
 const boom = require("@hapi/boom");
 
 const MenuSlug = require("../models/menu-slug.model");
-const permissionService = require("./permission.service");
+const RolMenuSlug = require("../models/rol-menu-slug.model");
+
 const userService = require("./user.service");
 
 const slugService = {
+  /**
+   * Assign slug to user or rool
+   * @param { Object } data - RolMenu data to slug
+   * @returns { Object } Data created
+   */
+
+  assignMenuSlug: async (data) => {
+    const slugRol = await slugService.findSlugsByRol({
+      rol_id: data.rol_id,
+      menu_slug_id: data.menu_slug_id,
+    });
+
+    if (slugRol.length >= 1) {
+      throw boom.notFound("Rol already has that slug");
+    }
+
+    return await RolMenuSlug.create(data);
+  },
+
   /**
    * Create an MenuSlug
    * @param { Object } data - MenuSlug data
@@ -50,6 +70,28 @@ const slugService = {
   },
 
   /**
+   * Find slugs by rol
+   * @param { Object } filters.rol_id - Rol id
+   * @returns { Array } Slugs menu to rol
+   */
+
+  findSlugsByRol: async (filters) => {
+    const slugs = await RolMenuSlug.findAll({
+      include: [
+        {
+          as: "menu_slug",
+          model: MenuSlug,
+          attributes: ["id", "name", "icon", "slug", "slug_root"],
+        },
+      ],
+      attributes: ["menu_slug_id"],
+      where: filters,
+    });
+
+    return slugs;
+  },
+
+  /**
    * Find slugs by rol_id and user_id
    * @param { Object } filters.rol_id - Rol id
    * @param { Object } filters.user_id - User id
@@ -57,7 +99,7 @@ const slugService = {
    */
 
   findSlugsLogin: async (filters) => {
-    const slugsRol = await permissionService.findSlugsByPermission({
+    const slugsRol = await slugService.findSlugsByRol({
       rol_id: filters.rol_id,
     });
 

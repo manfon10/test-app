@@ -3,9 +3,10 @@ const Router = require("express");
 const {
   createMenuSlug,
   findAllMenuSlugs,
+  assignSlugToRol,
 } = require("../controllers/slug.controller");
 
-const { createSlugMenuDto } = require("../dtos/slug.dto");
+const { createSlugMenuDto, assignSlugDto } = require("../dtos/slug.dto");
 
 const { checkToken, checkPermissions } = require("../middlewares/auth.handler");
 const { checkCookie } = require("../middlewares/cookie.handler");
@@ -23,6 +24,13 @@ router.post(
   checkPermissions("crear_enlace"),
   validatorHandler(createSlugMenuDto, "body"),
   createMenuSlug
+);
+
+router.post(
+  "/assign_slug",
+  checkPermissions("asignar_slug"),
+  validatorHandler(assignSlugDto, "body"),
+  assignSlugToRol
 );
 
 module.exports = router;

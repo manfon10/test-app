@@ -46,17 +46,17 @@ const checkToken = async (req, _, next) => {
 
 const checkPermissions = (slug) => async (req, _, next) => {
   try {
-    const permissionByRol = await permissionService.findSlugsByPermission({
+    const permission = await permissionService.findPermission({
       slug,
+    });
+
+    const permissionByRol = await permissionService.findPermissionsByRol({
+      permission_id: permission.id,
       rol_id: req.sessionUser.rol.id,
     });
 
-    const findPermission = await permissionService.permissionValidation({
-      slug,
-    });
-
     const permissionByUser = await userService.filterPermissionByUser({
-      permission_id: findPermission.id,
+      permission_id: permission.id,
       user_id: req.sessionUser.id,
     });
 

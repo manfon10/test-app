@@ -12,4 +12,12 @@ const createSlugMenuDto = Joi.object({
   icon: icon.required(),
 });
 
-module.exports = { createSlugMenuDto };
+const rol_id = Joi.number();
+const menu_slug_id = Joi.number();
+
+const assignSlugDto = Joi.object({
+  rol_id: rol_id.required(),
+  menu_slug_id: menu_slug_id.required(),
+});
+
+module.exports = { createSlugMenuDto, assignSlugDto };

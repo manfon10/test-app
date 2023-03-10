@@ -22,4 +22,16 @@ const findAllMenuSlugs = async (_, res, next) => {
   }
 };
 
-module.exports = { createMenuSlug, findAllMenuSlugs };
+const assignSlugToRol = async (req, res, next) => {
+  try {
+    const body = req.body;
+
+    const slug = await slugService.assignMenuSlug(body);
+
+    res.status(201).json({ slug });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { createMenuSlug, findAllMenuSlugs, assignSlugToRol };

@@ -6,11 +6,13 @@ const {
   deletePermissionByid,
   findAllPermissions,
   updatePermissionById,
+  assignPermissionToRol,
 } = require("../controllers/permission.controller");
 
 const {
   createPermissionDto,
   filterPermissionByParamsDto,
+  assignPermissionDto,
 } = require("../dtos/permission.dto");
 
 const { checkToken, checkPermissions } = require("../middlewares/auth.handler");
@@ -50,6 +52,13 @@ router.post(
   checkPermissions("crear_permiso"),
   validatorHandler(createPermissionDto, "body"),
   createPermission
+);
+
+router.post(
+  "/assign_permission",
+  checkPermissions("asignar_permiso_a_rol"),
+  validatorHandler(assignPermissionDto, "body"),
+  assignPermissionToRol
 );
 
 module.exports = router;

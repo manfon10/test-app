@@ -2,8 +2,7 @@ const { Model, DataTypes } = require("sequelize");
 
 const sequelize = require(".");
 
-const MenuSlug = require("./menu-slug.model");
-const Rol = require("./rol.model");
+const RolPermission = require("./rol-permission.model");
 const UserPermission = require("./user-permission.model");
 
 class Permission extends Model {}
@@ -31,14 +30,11 @@ Permission.init(
   }
 );
 
-Rol.hasMany(Permission, { foreignKey: "rol_id" });
-Permission.belongsTo(Rol, { foreignKey: "rol_id" });
-
-MenuSlug.hasMany(Permission, { as: "menu_slug", foreignKey: "menu_slug_id" });
-Permission.belongsTo(MenuSlug, {
-  as: "menu_slug",
-  foreignKey: "menu_slug_id",
+Permission.hasMany(RolPermission, {
+  foreignKey: "permission_id",
+  onDelete: "cascade",
 });
+RolPermission.belongsTo(Permission, { foreignKey: "permission_id" });
 
 Permission.hasMany(UserPermission, {
   foreignKey: "permission_id",

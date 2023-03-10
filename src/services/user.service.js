@@ -5,7 +5,6 @@ const Rol = require("../models/rol.model");
 const Permission = require("../models/permission.model");
 const UserPermission = require("../models/user-permission.model");
 const User = require("../models/user.model");
-const MenuSlug = require("../models/menu-slug.model");
 const Level = require("../models/level.model");
 const Area = require("../models/area.model");
 const Branch = require("../models/branch.model");
@@ -91,6 +90,16 @@ const userService = {
     await userService.findUser(filters);
 
     return User.destroy({ where: filters });
+  },
+
+  /**
+   * Delete a user to manaer area
+   * @param { Object } filters - Filters data
+   * @returns { Number } Affected rows
+   */
+
+  deleteUserAreaManager: async (filters) => {
+    return await AreaManager.destroy({ where: filters });
   },
 
   /**
@@ -236,15 +245,6 @@ const userService = {
   findSlugsByUser: async (filters) => {
     const slugs = await UserPermission.findAll({
       attributes: ["id"],
-      include: {
-        attributes: ["menu_slug_id", "id", "name", "slug"],
-        model: Permission,
-        include: {
-          as: "menu_slug",
-          attributes: ["name", "slug", "slug_root", "icon"],
-          model: MenuSlug,
-        },
-      },
       where: { user_id: filters.user_id },
     });
 
@@ -285,6 +285,8 @@ const userService = {
         user_id: filters.id,
         area_id: data.area_id,
       });
+    } else {
+      await userService.deleteUserAreaManager({ user_id: filters.id });
     }
 
     await User.update(data, { where: filters });

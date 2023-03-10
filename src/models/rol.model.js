@@ -2,6 +2,9 @@ const { Model, DataTypes } = require("sequelize");
 
 const sequelize = require(".");
 
+const RolMenuSlug = require("./rol-menu-slug.model");
+const RolPermission = require("./rol-permission.model");
+
 class Rol extends Model {}
 
 Rol.init(
@@ -15,7 +18,6 @@ Rol.init(
     name: {
       allowNull: false,
       type: DataTypes.STRING,
-      unique: true,
     },
   },
   {
@@ -23,5 +25,11 @@ Rol.init(
     sequelize,
   }
 );
+
+Rol.hasMany(RolPermission, { foreignKey: "rol_id", onDelete: "cascade" });
+RolPermission.belongsTo(Rol, { foreignKey: "rol_id" });
+
+Rol.hasMany(RolMenuSlug, { foreignKey: "rol_id", onDelete: "cascade" });
+RolMenuSlug.belongsTo(Rol, { foreignKey: "rol_id" });
 
 module.exports = Rol;

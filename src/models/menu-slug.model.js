@@ -1,6 +1,7 @@
 const { Model, DataTypes } = require("sequelize");
 
 const sequelize = require(".");
+const RolMenuSlug = require("./rol-menu-slug.model");
 
 class MenuSlug extends Model {}
 
@@ -34,5 +35,14 @@ MenuSlug.init(
     sequelize,
   }
 );
+
+MenuSlug.hasMany(RolMenuSlug, {
+  foreignKey: "menu_slug_id",
+  onDelete: "cascade",
+});
+RolMenuSlug.belongsTo(MenuSlug, {
+  as: "menu_slug",
+  foreignKey: "menu_slug_id",
+});
 
 module.exports = MenuSlug;
