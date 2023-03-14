@@ -2,11 +2,9 @@ const areaService = require("../services/area.service");
 
 const getAllAreas = async (req, res, next) => {
   try {
-    const params = {
-      branch_id: req.sessionUser.branch && req.sessionUser.branch.id,
-    };
+    const branch_id = req.sessionUser.branch.id;
 
-    const areas = await areaService.findAreas(params);
+    const areas = await areaService.findAreas({ branch_id });
 
     res.status(200).json({ areas });
   } catch (error) {
@@ -17,13 +15,9 @@ const getAllAreas = async (req, res, next) => {
 const getAreaById = async (req, res, next) => {
   try {
     const id = req.params;
+    const branch_id = req.sessionUser.branch.id;
 
-    const params = {
-      ...id,
-      branch_id: req.sessionUser.branch && req.sessionUser.branch.id,
-    };
-
-    const area = await areaService.findArea(params);
+    const area = await areaService.findArea({ ...id, branch_id });
 
     res.status(200).json({ area });
   } catch (error) {
@@ -34,14 +28,9 @@ const getAreaById = async (req, res, next) => {
 const createArea = async (req, res, next) => {
   try {
     const data = req.body;
-    const branch_id = req.sessionUser.branch && req.sessionUser.branch.id;
+    const branch_id = req.sessionUser.branch.id;
 
-    const body = {
-      ...data,
-      branch_id,
-    };
-
-    const newArea = await areaService.createArea(body);
+    const newArea = await areaService.createArea({ ...data, branch_id });
 
     res.status(201).json({ newArea });
   } catch (error) {
@@ -52,13 +41,9 @@ const createArea = async (req, res, next) => {
 const deleteArea = async (req, res, next) => {
   try {
     const id = req.params;
+    const branch_id = req.sessionUser.branch.id;
 
-    const params = {
-      ...id,
-      branch_id: req.sessionUser.branch && req.sessionUser.branch.id,
-    };
-
-    await areaService.deleteArea(params);
+    await areaService.deleteArea({ ...id, branch_id });
 
     res.status(201).json({ message: "Area deleted" });
   } catch (error) {
@@ -70,13 +55,9 @@ const updateArea = async (req, res, next) => {
   try {
     const id = req.params;
     const body = req.body;
+    const branch_id = req.sessionUser.branch.id;
 
-    const params = {
-      ...id,
-      branch_id: req.sessionUser.branch && req.sessionUser.branch.id,
-    };
-
-    const area = await areaService.updateArea(body, params);
+    const area = await areaService.updateArea(body, { ...id, branch_id });
 
     res.status(201).json({ message: "Area updated", area });
   } catch (error) {

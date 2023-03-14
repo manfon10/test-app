@@ -40,6 +40,19 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 
+const getUserByArea = async (req, res, next) => {
+  try {
+    const area_id = req.params.id;
+    const branch_id = req.sessionUser.branch && req.sessionUser.branch.id;
+
+    const users = await userService.findUsers({ branch_id, area_id });
+
+    res.status(200).json({ users });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteUserById = async (req, res, next) => {
   try {
     const id = req.params;
@@ -108,6 +121,7 @@ module.exports = {
   createUser,
   assignPermissionToUser,
   getAllUsers,
+  getUserByArea,
   deleteUserById,
   getUserById,
   updateUserById,

@@ -2,6 +2,8 @@ const { Model, DataTypes } = require("sequelize");
 
 const sequelize = require(".");
 
+const User = require("./user.model");
+
 class Branch extends Model {}
 
 Branch.init(
@@ -50,5 +52,8 @@ Branch.init(
     sequelize,
   }
 );
+
+Branch.hasMany(User, { as: "branch", foreignKey: "branch_id" });
+User.belongsTo(Branch, { as: "branch", foreignKey: "branch_id" });
 
 module.exports = Branch;

@@ -1,7 +1,9 @@
 const { Model, DataTypes } = require("sequelize");
 
 const sequelize = require(".");
+
 const AreaManager = require("./area-manager.model");
+const User = require("./user.model");
 
 class Area extends Model {}
 
@@ -27,6 +29,9 @@ Area.init(
     sequelize,
   }
 );
+
+Area.hasMany(User, { foreignKey: "area_id" });
+User.belongsTo(Area, { as: "area", foreignKey: "area_id" });
 
 Area.hasMany(AreaManager, {
   as: "area_manager",

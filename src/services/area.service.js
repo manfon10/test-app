@@ -92,8 +92,18 @@ const areaService = {
    */
 
   findArea: async (filters) => {
+    let areasResult = [];
+
     const area = await Area.findOne({
       attributes: ["id", "name"],
+      include: {
+        model: AreaManager,
+        as: "area_manager",
+        include: {
+          model: User,
+          attributes: ["id"],
+        },
+      },
       where: filters,
     });
 
@@ -101,37 +111,34 @@ const areaService = {
       throw boom.badRequest("Area does not exist");
     }
 
-    const managersArea = await areaService.findManagersArea({
-      area_id: parseInt(filters.id),
-    });
+    let managers = [];
 
-    let managerResult = {};
+    if (area.area_manager.length >= 1) {
+      const managerPromise = area.area_manager.map(async (areaManager) => {
+        const manager = await userService.findUser({
+          id: areaManager.user_id,
+        });
 
-    if (managersArea.length >= 1) {
-      const managerPromise = managersArea.map(async (managerArea) => {
-        const user = await userService.findUser({ id: managerArea.user_id });
+        delete manager.password;
 
-        delete user.dataValues.password;
-
-        return user;
+        managers.push(manager);
       });
 
-      const manager = await Promise.all(managerPromise);
+      areasResult.push({
+        ...area.dataValues,
+        area_manager: managers,
+      });
 
-      managerResult.manager_area = manager;
+      await Promise.all(managerPromise);
+    } else {
+      delete area.dataValues.area_manager;
+
+      areasResult.push({
+        ...area.dataValues,
+      });
     }
 
-    return { ...area.dataValues, ...managerResult };
-  },
-
-  /**
-   * Get manager to area
-   * @param { Object } filters - filters
-   * @returns { Object } Manager area
-   */
-
-  findManagersArea: async (filters) => {
-    return await AreaManager.findAll({ where: filters });
+    return areasResult;
   },
 
   /**

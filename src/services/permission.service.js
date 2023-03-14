@@ -42,7 +42,7 @@ const permissionService = {
       });
     }
 
-    const permission = await permissionService.permissionValidation({
+    const permission = await permissionService.findPermission({
       id: permissionCreate.id,
     });
 
@@ -56,7 +56,7 @@ const permissionService = {
    */
 
   deletePermission: async (filters) => {
-    await permissionService.permissionValidation(filters);
+    await permissionService.findPermission(filters);
 
     return Permission.destroy({ where: filters });
   },
@@ -144,7 +144,7 @@ const permissionService = {
 
     await Permission.update({ slug, ...data }, { where: filters });
 
-    return await permissionService.permissionValidation(filters);
+    return await permissionService.findPermission(filters);
   },
 };
 

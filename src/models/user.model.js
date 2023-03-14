@@ -3,10 +3,8 @@ const { Model, DataTypes } = require("sequelize");
 const sequelize = require(".");
 
 const AreaManager = require("./area-manager.model");
-const Area = require("./area.model");
-const Branch = require("./branch.model");
-const Level = require("./level.model");
-const Rol = require("./rol.model");
+const ProductManager = require("./product-manager.model");
+const Product = require("./product.model");
 const UserPermission = require("./user-permission.model");
 
 class User extends Model {}
@@ -47,26 +45,23 @@ User.init(
   }
 );
 
-Area.hasMany(User, { foreignKey: "area_id" });
-User.belongsTo(Area, { as: "area", foreignKey: "area_id" });
-
-Level.hasMany(User, { foreignKey: "level_id" });
-User.belongsTo(Level, { as: "level", foreignKey: "level_id" });
-
-Rol.hasMany(User, { as: "rol", foreignKey: "rol_id" });
-User.belongsTo(Rol, { as: "rol", foreignKey: "rol_id" });
-
 User.hasMany(UserPermission, { foreignKey: "user_id", onDelete: "cascade" });
 UserPermission.belongsTo(User, { foreignKey: "user_id" });
-
-Branch.hasMany(User, { as: "branch", foreignKey: "branch_id" });
-User.belongsTo(Branch, { as: "branch", foreignKey: "branch_id" });
 
 User.hasMany(AreaManager, {
   foreignKey: "user_id",
   onDelete: "cascade",
 });
 AreaManager.belongsTo(User, {
+  foreignKey: "user_id",
+});
+
+User.hasMany(Product, { as: "product", foreignKey: "auditor_id" });
+Product.belongsTo(User, { as: "auditor", foreignKey: "auditor_id" });
+
+User.hasMany(ProductManager, { foreignKey: "user_id" });
+ProductManager.belongsTo(User, {
+  as: "manager_product",
   foreignKey: "user_id",
 });
 

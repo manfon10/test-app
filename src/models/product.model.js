@@ -2,8 +2,7 @@ const { Model, DataTypes } = require("sequelize");
 
 const sequelize = require(".");
 
-const Project = require("./project.model");
-const User = require("./user.model");
+const ProductManager = require("./product-manager.model");
 
 class Product extends Model {}
 
@@ -42,10 +41,13 @@ Product.init(
   }
 );
 
-User.hasMany(Product, { as: "product", foreignKey: "auditor_id" });
-Product.belongsTo(User, { as: "auditor", foreignKey: "auditor_id" });
-
-Project.hasMany(Product, { as: "product", foreignKey: "project_id" });
-Product.belongsTo(Project, { as: "project", foreignKey: "project_id" });
+Product.hasMany(ProductManager, {
+  as: "product_manager",
+  foreignKey: "product_id",
+  onDelete: "cascade",
+});
+ProductManager.belongsTo(Product, {
+  foreignKey: "product_id",
+});
 
 module.exports = Product;

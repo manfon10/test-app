@@ -3,6 +3,7 @@ const boom = require("@hapi/boom");
 const Product = require("../models/product.model");
 const Project = require("../models/project.model");
 const Client = require("../models/client.model");
+const ProductManager = require("../models/product-manager.model");
 
 const userService = require("./user.service");
 
@@ -14,9 +15,18 @@ const productService = {
    */
 
   createProduct: async (data) => {
-    const project = await Product.create(data);
+    const product = await Product.create(data);
 
-    return await productService.findProduct({ id: project.id });
+    const productsManagerPromise = data.core_team.map(async (dataCoreTeam) => {
+      await ProductManager.create({
+        user_id: dataCoreTeam.user_id,
+        product_id: product.id,
+      });
+    });
+
+    await Promise.all(productsManagerPromise);
+
+    return await productService.findProduct({ id: product.id });
   },
 
   /**
@@ -39,16 +49,23 @@ const productService = {
 
   findProduct: async (filters) => {
     const product = await Product.findOne({
-      include: {
-        model: Project,
-        as: "project",
-        attributes: ["id", "name"],
-        include: {
-          model: Client,
-          as: "client",
+      include: [
+        {
+          model: Project,
+          as: "project",
           attributes: ["id", "name"],
+          include: {
+            model: Client,
+            as: "client",
+            attributes: ["id", "name"],
+          },
         },
-      },
+        {
+          model: ProductManager,
+          as: "product_manager",
+          attributes: ["user_id"],
+        },
+      ],
       attributes: [
         "id",
         "name",
@@ -69,7 +86,29 @@ const productService = {
     delete auditor.password;
     delete product.dataValues.auditor_id;
 
-    return { ...product.dataValues, auditor };
+    product.dataValues.auditor = auditor;
+
+    let managers = [];
+
+    const productManagersPromise = product.product_manager.map(
+      async (productManager) => {
+        const user = await userService.findUser({
+          id: productManager.user_id,
+        });
+
+        delete user.password;
+
+        managers.push(user);
+      }
+    );
+
+    await Promise.all(productManagersPromise);
+
+    product.dataValues.core_team = managers;
+
+    delete product.dataValues.product_manager;
+
+    return product;
   },
 
   /**
@@ -79,19 +118,24 @@ const productService = {
    */
 
   findProducts: async (filters) => {
-    let productsResult = [];
-
     const products = await Product.findAll({
-      include: {
-        model: Project,
-        as: "project",
-        attributes: ["id", "name"],
-        include: {
-          model: Client,
-          as: "client",
+      include: [
+        {
+          model: Project,
+          as: "project",
           attributes: ["id", "name"],
+          include: {
+            model: Client,
+            as: "client",
+            attributes: ["id", "name"],
+          },
         },
-      },
+        {
+          model: ProductManager,
+          as: "product_manager",
+          attributes: ["user_id"],
+        },
+      ],
       attributes: [
         "id",
         "name",
@@ -109,15 +153,34 @@ const productService = {
       delete auditor.password;
       delete product.dataValues.auditor_id;
 
-      productsResult.push({
-        ...product.dataValues,
-        auditor,
-      });
+      product.dataValues.auditor = auditor;
+
+      if (product.product_manager.length >= 1) {
+        const managersPromise = product.product_manager.map(
+          async (productManager) => {
+            const user = await userService.findUser({
+              id: productManager.user_id,
+            });
+
+            delete user.password;
+
+            return user;
+          }
+        );
+
+        delete product.dataValues.product_manager;
+
+        const managers = await Promise.all(managersPromise);
+
+        product.dataValues.core_team = managers;
+      }
+
+      delete product.dataValues.product_manager;
     });
 
     await Promise.all(productsPromise);
 
-    return productsResult;
+    return products;
   },
 
   /**

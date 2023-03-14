@@ -2,6 +2,8 @@ const { Model, DataTypes } = require("sequelize");
 
 const sequelize = require(".");
 
+const Product = require("./product.model");
+
 class Project extends Model {}
 
 Project.init(
@@ -26,5 +28,8 @@ Project.init(
     sequelize,
   }
 );
+
+Project.hasMany(Product, { as: "product", foreignKey: "project_id" });
+Product.belongsTo(Project, { as: "project", foreignKey: "project_id" });
 
 module.exports = Project;

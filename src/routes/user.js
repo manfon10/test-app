@@ -9,6 +9,7 @@ const {
   updateUserById,
   updatePasswordByUser,
   updatePasswordByUserForgot,
+  getUserByArea,
 } = require("../controllers/user.controller");
 
 const {
@@ -29,6 +30,12 @@ router.use(checkCookie);
 router.use(checkToken);
 
 router.get("/", checkPermissions("visualizar_usuarios"), getAllUsers);
+
+router.get(
+  "/area/:id",
+  checkPermissions("visualizar_usuarios_por_area"),
+  getUserByArea
+);
 
 router.get(
   "/:id",
